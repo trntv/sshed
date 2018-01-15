@@ -77,7 +77,7 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 		{
 			Name: "keyfile",
 			Prompt: &survey.Input{
-				Message: "Password file (optional):",
+				Message: "Key file (optional):",
 				Default: srv.KeyFile,
 			},
 		},

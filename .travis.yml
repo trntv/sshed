@@ -1,9 +1,29 @@
+language: go
+sudo: false
+notifications:
+  email: false
+
+go:
+  - 1.9.x
+
+before_install:
+  - curl -L -s https://github.com/golang/dep/releases/download/v0.3.2/dep-linux-amd64 -o $GOPATH/bin/dep
+  - chmod +x $GOPATH/bin/dep
+
+install: "dep ensure"
+
+test:
+  script: go test -v ./...
+
+before_deploy: "make BINARY_PATH=bin/sshed compile"
+
 deploy:
   provider: releases
-  api_key: ${GITHUB_OAUTH_TOKEN}
+  api_key: $GITHUB_OAUTH_TOKEN
   file: "bin/sshed"
   skip_cleanup: true
   on:
     tags: true
 
-before_deploy: "make BINARY_PATH=bin/sshed compile"
+addons:
+  ssh_known_hosts: github.com

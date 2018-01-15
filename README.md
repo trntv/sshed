@@ -1,4 +1,4 @@
-sshed - SSH connections manager
+sshdb - SSH connections manager
 ---
 Simple program created to manage list of ssh connections.
 
@@ -7,11 +7,11 @@ Simple program created to manage list of ssh connections.
 # Installation
 download binary
 ```
-curl -L -s https://github.com/trntv/sshed/releases/download/0.1.0/sshed -o sshed
+curl -L -s https://github.com/trntv/sshdb/releases/download/0.2.0/sshdb -o sshdb
 ```
 or install with ``go get``
 ```
-go get -u github.com/trntv/sshed
+go get -u github.com/trntv/sshdb
 ```
 
 for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
@@ -29,7 +29,7 @@ for other package managers see: [https://github.com/kevinburke/sshpass](https://
 # Usage
 ```
 NAME:
-   sshed - SSH connections manager
+   sshdb - SSH connections manager
 
 USAGE:
    help [global options] command [command options] [arguments...]
@@ -50,7 +50,7 @@ COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --database value, --db value  Path to database file (default: "$HOME/.sshedb") [$SSHED_DB_PATH]
+   --database value, --db value  Path to database file (default: "$HOME/.sshdbb") [$SSHED_DB_PATH]
    --help, -h                    show help
    --version, -v                 print the version
 

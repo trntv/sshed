@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/trntv/sshed/db"
+	"github.com/trntv/sshdb/db"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"os/user"

@@ -7,7 +7,7 @@ LDFLAGS=-ldflags "-X=main.version=$(VERSION) -X=main.build=$(BUILD)"
 
 SOURCE_FOLDER := .
 
-BINARY_PATH ?= $(GOPATH)/bin/sshed
+BINARY_PATH ?= $(GOPATH)/bin/sshdb
 
 GOARCH ?= amd64
 

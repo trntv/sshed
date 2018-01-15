@@ -16,12 +16,12 @@ test:
   stage: test
   script: go test -v ./...
 
-before_deploy: "make BINARY_PATH=bin/sshed compile"
+before_deploy: "make BINARY_PATH=bin/sshdb compile"
 
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
-  file: "bin/sshed"
+  file: "bin/sshdb"
   skip_cleanup: true
   on:
     tags: true

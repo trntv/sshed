@@ -2,7 +2,7 @@ package commands
 
 import (
 	"fmt"
-	"github.com/trntv/sshed/db"
+	"github.com/trntv/sshdb/db"
 	"github.com/urfave/cli"
 	"os"
 	"os/exec"

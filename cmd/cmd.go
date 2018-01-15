@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 	"github.com/mgutz/ansi"
-	"github.com/trntv/sshed/commands"
+	"github.com/trntv/sshdb/commands"
 	"github.com/urfave/cli"
 )
 
@@ -14,7 +14,7 @@ var version, build string
 func main() {
 	app := cli.NewApp()
 
-	app.Name = "sshed"
+	app.Name = "sshdb"
 	app.Usage = "SSH connections manager"
 	app.Author = "Eugene Terentev"
 	app.Email = "eugene@terentev.net"
@@ -28,7 +28,7 @@ func main() {
 		cli.StringFlag{
 			Name:   "database, db",
 			EnvVar: "SSHED_DB_PATH",
-			Value:  fmt.Sprintf("%s/%s", os.Getenv("HOME"), ".sshedb"),
+			Value:  fmt.Sprintf("%s/%s", os.Getenv("HOME"), ".sshdb"),
 			Usage:  "Path to database file",
 		},
 	}

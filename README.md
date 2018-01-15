@@ -4,12 +4,18 @@ Simple program created to manage list of ssh connections.
 
 ![Interface](gui.gif)
 
-#Installation
+# Installation
+download binary
+```
+curl -L -s https://github.com/trntv/sshed/releases/download/0.1.0/sshed -o sshed
+```
+or install with ``go get``
 ```
 go get -u github.com/trntv/sshed
 ```
 
-#Features
+for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
+# Features
 - add, show, list, remove ssh connections
 - supported fields
     - Host
@@ -20,7 +26,7 @@ go get -u github.com/trntv/sshed
 - connect to server by key
 - database encryption
 
-#Usage
+# Usage
 ```
 NAME:
    sshed - SSH connections manager
@@ -49,7 +55,16 @@ GLOBAL OPTIONS:
    --version, -v                 print the version
 
 ```
-   
+
+# Tips
+to store passwords you need to install sshpass that allows to 
+offer a password via SSH
+
+to install it with brew use
+```
+brew install http://git.io/sshpass.rb
+```
+
 TODO:
  - [ ] backup
  - [ ] restore

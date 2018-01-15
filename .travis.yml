@@ -13,6 +13,7 @@ before_install:
 install: "dep ensure"
 
 test:
+  stage: test
   script: go test -v ./...
 
 before_deploy: "make BINARY_PATH=bin/sshed compile"

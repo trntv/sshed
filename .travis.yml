@@ -1,0 +1,9 @@
+deploy:
+  provider: releases
+  api_key: ${GITHUB_OAUTH_TOKEN}
+  file: "bin/sshed"
+  skip_cleanup: true
+  on:
+    tags: true
+
+before_deploy: "make BINARY_PATH=bin/sshed compile"

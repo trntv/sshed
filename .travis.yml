@@ -16,12 +16,15 @@ test:
   stage: test
   script: go test -v ./...
 
-before_deploy: "make BINARY_PATH=bin/sshdb compile"
+before_deploy:
+  - make BINARY_PATH=sshdb compile
 
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
-  file: "bin/sshdb"
+  file:
+    - sshdb
+    - sshdb.sha256
   skip_cleanup: true
   on:
     tags: true

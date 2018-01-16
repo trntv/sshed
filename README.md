@@ -13,8 +13,17 @@ or install with ``go get``
 ```
 go get -u github.com/trntv/sshdb
 ```
+or compile it from source
+```
+git clone https://github.com/trntv/sshdb.git
+cd sshdb
+make
+```
+install with brew
+```
+brew install https://raw.githubusercontent.com/trntv/sshdb/master/sshdb.rb
+```
 
-for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
 # Features
 - add, show, list, remove ssh connections
 - supported fields
@@ -64,9 +73,22 @@ to install it with brew use
 ```
 brew install http://git.io/sshpass.rb
 ```
+for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
 
-TODO:
+# Similar projects
+Searching for such a tool i've found some similar projects but examined them i've ended up writing my own solution:
+ - [https://github.com/mmeyer724/sshmenu](https://github.com/mmeyer724/sshmenu)    
+ - [https://github.com/vaniacer/sshto](https://github.com/vaniacer/sshto)
+ - [https://github.com/xiongharry/sshtoy](https://github.com/xiongharry/sshtoy)
+ - [https://github.com/sciancio/connectionmanager2](https://github.com/sciancio/connectionmanager2)
+ - etc.
+ 
+# TODO
  - [ ] backup
  - [ ] restore
  - [ ] manage ssh config (view, edit)
  - [ ] additional arguments to ssh command
+ - [ ] key, password generation
+ - [ ] bind address
+ - [ ] replace sshpass with native go implementation
+ - [ ] scp

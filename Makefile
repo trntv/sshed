@@ -17,6 +17,9 @@ endif
 
 default: build
 
+bootstrap:
+	dep ensure
+
 build_all: vet fmt
 	for GOOS in darwin linux windows; do \
 		$(MAKE) compile GOOS=$$GOOS GOARCH=amd64 ; \
@@ -25,7 +28,7 @@ build_all: vet fmt
 compile:
 	CGO_ENABLED=0 go build -i -v $(LDFLAGS) -o $(BINARY_PATH) $(SOURCE_FOLDER)/cmd
 
-build: vet fmt compile
+build: vet fmt compile checksum
 
 fmt:
 	go fmt ./cmd ./commands ./db
@@ -39,9 +42,5 @@ lint:
 test:
 	go test ./cmd ./commands ./db
 
-itest:
-	$(MAKE) compile GOOS=linux GOARCH=amd64
-	bats $(SPECS)
-
-bootstrap:
-	dep ensure
+checksum:
+	openssl sha -sha256 $(BINARY_PATH) > sshdb.sha256

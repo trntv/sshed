@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/trntv/sshdb/db"
 	"github.com/urfave/cli"
 )

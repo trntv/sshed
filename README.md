@@ -7,7 +7,7 @@ Simple program created to manage list of ssh connections.
 # Installation
 download binary
 ```
-curl -L -s https://github.com/trntv/sshdb/releases/download/0.2.0/sshdb -o sshdb
+curl -L -s https://github.com/trntv/sshdb/releases/download/0.3.0/sshdb -o sshdb
 ```
 or install with ``go get``
 ```
@@ -77,7 +77,7 @@ brew install http://git.io/sshpass.rb
 for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
 
 # Similar projects
-Searching for such a tool i've found some similar projects but examined them i've ended up writing my own solution:
+Searching for such tool i've found some similar projects but ended up writing my own solution:
  - [https://github.com/mmeyer724/sshmenu](https://github.com/mmeyer724/sshmenu)    
  - [https://github.com/vaniacer/sshto](https://github.com/vaniacer/sshto)
  - [https://github.com/xiongharry/sshtoy](https://github.com/xiongharry/sshtoy)
@@ -85,6 +85,7 @@ Searching for such a tool i've found some similar projects but examined them i'v
  - etc.
  
 # TODO
+ - [ ] ``sshed at`` - executes command on server
  - [ ] backup
  - [ ] restore
  - [ ] manage ssh config (view, edit)

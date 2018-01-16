@@ -18,6 +18,7 @@ test:
 
 before_deploy:
   - make BINARY_PATH=sshdb compile
+  - make BINARY_PATH=sshdb checksum
 
 deploy:
   provider: releases

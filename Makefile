@@ -28,7 +28,7 @@ build_all: vet fmt
 compile:
 	CGO_ENABLED=0 go build -i -v $(LDFLAGS) -o $(BINARY_PATH) $(SOURCE_FOLDER)/cmd
 
-build: vet fmt compile checksum
+build: vet fmt compile
 
 fmt:
 	go fmt ./cmd ./commands ./db

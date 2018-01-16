@@ -84,6 +84,7 @@ Searching for such a tool i've found some similar projects but examined them i'v
  - etc.
  
 # TODO
+ - [ ] ``sshed at`` - executes command on server
  - [ ] backup
  - [ ] restore
  - [ ] manage ssh config (view, edit)

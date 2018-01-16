@@ -6,10 +6,18 @@ import (
 	"github.com/trntv/sshdb/db"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
+	"os"
+	"os/exec"
+	"os/user"
+	"strings"
 )
 
 type Commands struct {
 	database *db.DB
+}
+
+type options struct {
+	verbose bool
 }
 
 func RegisterCommands(app *cli.App) {
@@ -84,6 +92,7 @@ func RegisterCommands(app *cli.App) {
 		commands.newAddCommand(),
 		commands.newRemoveCommand(),
 		commands.newToCommand(),
+		commands.newAtCommand(),
 		commands.newEncryptCommand(),
 	}
 }
@@ -128,4 +137,52 @@ func (cmds *Commands) printServer(key string, srv *db.Server) {
 	if srv.KeyFile != "" {
 		fmt.Printf(f, ansi.Color("Password File", "green"), ansi.Color(srv.KeyFile, "white"))
 	}
+}
+
+func (cmds *Commands) exec(srv *db.Server, options *options, command string) error {
+	var username string
+	if srv.User == "" {
+		u, err := user.Current()
+		if err != nil {
+			return err
+		}
+		username = u.Username
+	} else {
+		username = srv.User
+	}
+
+	var args = make([]string, 0)
+	if srv.Password != "" {
+		args = []string{
+			"sshpass",
+			fmt.Sprintf("-p %s", srv.Password),
+		}
+	}
+
+	args = append(args, []string{
+		"ssh",
+		fmt.Sprintf("%s@%s", username, srv.Host),
+		fmt.Sprintf("-p %s", srv.Port),
+	}...)
+
+	if srv.KeyFile != "" {
+		args = append(args, fmt.Sprintf("-i %s", srv.KeyFile))
+	}
+
+	if options.verbose == true {
+		args = append(args, "-v")
+	}
+
+	if command != "" {
+		args = append(args, command)
+	}
+
+	cmd := exec.Command("sh", "-c", strings.Join(args, " "))
+
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+
+	err := cmd.Run()
+	return err
 }

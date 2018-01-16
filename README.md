@@ -44,7 +44,7 @@ USAGE:
    help [global options] command [command options] [arguments...]
 
 VERSION:
-   0.1.0 (build 9c569b6)
+   X.X.X (build xxxxxx)
 
 AUTHOR:
    Eugene Terentev <eugene@terentev.net>
@@ -55,6 +55,7 @@ COMMANDS:
      add      adds server to database
      remove   removes server from database
      to       connects to server
+     at       executes command on given server
      encrypt  encrypt database
      help, h  Shows a list of commands or help for one command
 
@@ -92,3 +93,4 @@ Searching for such a tool i've found some similar projects but examined them i'v
  - [ ] bind address
  - [ ] replace sshpass with native go implementation
  - [ ] scp
+ - [x] executes command on given server

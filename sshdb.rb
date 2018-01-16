@@ -1,6 +1,6 @@
 class Sshdb < Formula
   homepage "https://github.com/trntv/sshdb"
-  url "https://github.com/trntv/sshdb.git", :tag => "0.2.0"
+  url "https://github.com/trntv/sshdb.git", :tag => "0.3.0"
   version "0.2.0"
 
   depends_on "go" => :build

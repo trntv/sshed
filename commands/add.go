@@ -17,12 +17,9 @@ func (cmds *Commands) newAddCommand() cli.Command {
 }
 
 func (cmds *Commands) addAction(c *cli.Context) error {
-	var usr, _ = user.Current()
-	var srv = &db.Server{
-		Port: "22",
-		User: usr.Username,
-	}
+	var srv *db.Server
 	var err error
+	var usr, _ = user.Current()
 
 	if c.NArg() == 1 {
 		srv, err = cmds.database.Get(c.Args().First())
@@ -30,6 +27,13 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 			if _, ok := err.(db.ErrNotFound); ok == false {
 				return err
 			}
+		}
+	}
+
+	if srv == nil {
+		srv = &db.Server{
+			Port: "22",
+			User: usr.Username,
 		}
 	}
 

@@ -106,7 +106,6 @@ func (DB *DB) Close() error {
 func (DB *DB) Get(key string) (srv *Server, err error) {
 	DB.MustOpen()
 
-	srv = &Server{}
 	err = DB.boltdb.View(func(tx *bolt.Tx) error {
 		// Assume bucket exists and has keys
 		b := tx.Bucket(servers)
@@ -115,6 +114,7 @@ func (DB *DB) Get(key string) (srv *Server, err error) {
 			return ErrNotFound{Key: key}
 		}
 
+		srv = &Server{}
 		err = DB.unmarshal(value, srv)
 
 		return err

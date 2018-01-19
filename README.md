@@ -7,7 +7,7 @@ Simple program created to manage list of ssh connections.
 # Installation
 download binary
 ```
-curl -L -s https://github.com/trntv/sshdb/releases/download/0.3.0/sshdb -o sshdb
+curl -L -s https://github.com/trntv/sshdb/releases/download/0.3.1/sshdb -o sshdb
 ```
 or install with ``go get``
 ```
@@ -95,3 +95,5 @@ Searching for such tool i've found some similar projects but ended up writing my
  - [ ] replace sshpass with native go implementation
  - [ ] scp
  - [x] executes command on given server
+ - [ ] keyfile autocompletion
+ - [ ] bash autocompletion

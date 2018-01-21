@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/mgutz/ansi"
-	"github.com/trntv/sshdb/db"
+	"github.com/trntv/sshme/db"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"os"
@@ -135,7 +135,7 @@ func (cmds *Commands) printServer(key string, srv *db.Server) {
 	fmt.Printf(f, ansi.Color("Port", "green"), ansi.Color(srv.Port, "white"))
 	fmt.Printf(f, ansi.Color("User", "green"), ansi.Color(srv.User, "white"))
 	if srv.KeyFile != "" {
-		fmt.Printf(f, ansi.Color("Password File", "green"), ansi.Color(srv.KeyFile, "white"))
+		fmt.Printf(f, ansi.Color("Key file", "green"), ansi.Color(srv.KeyFile, "white"))
 	}
 }
 

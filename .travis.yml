@@ -17,15 +17,15 @@ test:
   script: go test -v ./...
 
 before_deploy:
-  - make BINARY_PATH=sshdb compile
-  - make BINARY_PATH=sshdb checksum
+  - make BINARY_PATH=sshme compile
+  - make BINARY_PATH=sshme checksum
 
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
   file:
-    - sshdb
-    - sshdb.sha256
+    - sshme
+    - sshme.sha256
   skip_cleanup: true
   on:
     tags: true

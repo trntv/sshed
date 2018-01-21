@@ -2,7 +2,7 @@ package commands
 
 import (
 	"errors"
-	"github.com/trntv/sshdb/db"
+	"github.com/trntv/sshme/db"
 	"github.com/urfave/cli"
 )
 

@@ -1,4 +1,4 @@
-sshdb - SSH connections manager
+sshme - SSH connections manager
 ---
 Simple program created to manage list of ssh connections.
 
@@ -7,21 +7,21 @@ Simple program created to manage list of ssh connections.
 # Installation
 download binary
 ```
-curl -L -s https://github.com/trntv/sshdb/releases/download/0.3.1/sshdb -o sshdb
+curl -L -s https://github.com/trntv/sshme/releases/download/0.3.1/sshme -o sshme
 ```
 or install with ``go get``
 ```
-go get -u github.com/trntv/sshdb
+go get -u github.com/trntv/sshme
 ```
 or compile it from source
 ```
-git clone https://github.com/trntv/sshdb.git
-cd sshdb
+git clone https://github.com/trntv/sshme.git
+cd sshme
 make
 ```
 install with brew
 ```
-brew install https://raw.githubusercontent.com/trntv/sshdb/master/sshdb.rb
+brew install https://raw.githubusercontent.com/trntv/sshme/master/sshme.rb
 ```
 
 # Features
@@ -38,7 +38,7 @@ brew install https://raw.githubusercontent.com/trntv/sshdb/master/sshdb.rb
 # Usage
 ```
 NAME:
-   sshdb - SSH connections manager
+   sshme - SSH connections manager
 
 USAGE:
    help [global options] command [command options] [arguments...]
@@ -60,7 +60,7 @@ COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --database value, --db value  Path to database file (default: "$HOME/.sshdbb") [$SSHED_DB_PATH]
+   --database value, --db value  Path to database file (default: "$HOME/.sshmeb") [$SSHED_DB_PATH]
    --help, -h                    show help
    --version, -v                 print the version
 
@@ -85,7 +85,7 @@ Searching for such tool i've found some similar projects but ended up writing my
  - etc.
  
 # TODO
- - [ ] ``sshed at`` - executes command on server
+ - [x] ``sshme at`` - executes command on server
  - [ ] backup
  - [ ] restore
  - [ ] manage ssh config (view, edit)

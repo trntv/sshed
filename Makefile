@@ -7,7 +7,7 @@ LDFLAGS=-ldflags "-X=main.version=$(VERSION) -X=main.build=$(BUILD)"
 
 SOURCE_FOLDER := .
 
-BINARY_PATH ?= $(GOPATH)/bin/sshdb
+BINARY_PATH ?= $(GOPATH)/bin/sshme
 
 GOARCH ?= amd64
 
@@ -43,4 +43,4 @@ test:
 	go test ./cmd ./commands ./db
 
 checksum:
-	openssl sha -sha256 $(BINARY_PATH) > sshdb.sha256
+	openssl sha -sha256 $(BINARY_PATH) > sshme.sha256

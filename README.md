@@ -5,9 +5,9 @@ Simple program created to manage list of ssh connections.
 ![Interface](gui.gif)
 
 # Installation
-download binary
+download binary (make sure to change X.X.X to real version)
 ```
-curl -L -s https://github.com/trntv/sshme/releases/download/0.4.1/sshme -o sshme
+curl -L -s https://github.com/trntv/sshme/releases/download/X.X.X/sshme -o sshme
 ```
 or install with ``go get``
 ```

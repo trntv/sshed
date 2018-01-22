@@ -7,7 +7,7 @@ Simple program created to manage list of ssh connections.
 # Installation
 download binary
 ```
-curl -L -s https://github.com/trntv/sshme/releases/download/0.3.1/sshme -o sshme
+curl -L -s https://github.com/trntv/sshme/releases/download/0.4.1/sshme -o sshme
 ```
 or install with ``go get``
 ```
@@ -60,7 +60,7 @@ COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --database value, --db value  Path to database file (default: "$HOME/.sshmeb") [$SSHED_DB_PATH]
+   --database value, --db value  Path to database file (default: "$HOME/.sshdb") [$SSHME_DB_PATH]
    --help, -h                    show help
    --version, -v                 print the version
 
@@ -94,6 +94,4 @@ Searching for such tool i've found some similar projects but ended up writing my
  - [ ] bind address
  - [ ] replace sshpass with native go implementation
  - [ ] scp
- - [x] executes command on given server
- - [ ] keyfile autocompletion
- - [ ] bash autocompletion
+ - [ ] autocompletion

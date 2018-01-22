@@ -26,7 +26,7 @@ build_all: vet fmt
 	done
 
 compile:
-	CGO_ENABLED=0 go build -i -v $(LDFLAGS) -o $(BINARY_PATH) $(SOURCE_FOLDER)/cmd
+	CGO_ENABLED=1 go build -i -v $(LDFLAGS) -o $(BINARY_PATH) $(SOURCE_FOLDER)/cmd
 
 build: vet fmt compile
 

@@ -27,8 +27,8 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "database, db",
-			EnvVar: "SSHDB_PATH",
-			Value:  fmt.Sprintf("%s/%s", os.Getenv("HOME"), ".sshme"),
+			EnvVar: "SSHME_DB_PATH",
+			Value:  fmt.Sprintf("%s/%s", os.Getenv("HOME"), ".sshdb"),
 			Usage:  "Path to database file",
 		},
 	}

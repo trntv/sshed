@@ -10,6 +10,13 @@ func (cmds *Commands) newShowCommand() cli.Command {
 		Usage:     "show server information",
 		ArgsUsage: "<key>",
 		Action:    cmds.showAction,
+		BashComplete: func(c *cli.Context) {
+			// This will complete if no args are passed
+			if c.NArg() > 0 {
+				return
+			}
+			cmds.completeWithServers()
+		},
 	}
 }
 

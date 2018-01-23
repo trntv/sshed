@@ -16,6 +16,13 @@ func (cmds *Commands) newToCommand() cli.Command {
 				Usage: "verbose ssh output",
 			},
 		},
+		BashComplete: func(c *cli.Context) {
+			// This will complete if no args are passed
+			if c.NArg() > 0 {
+				return
+			}
+			cmds.completeWithServers()
+		},
 		Action: cmds.toAction,
 	}
 }

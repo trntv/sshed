@@ -10,6 +10,13 @@ func (cmds *Commands) newRemoveCommand() cli.Command {
 		Usage:     "removes server from database",
 		ArgsUsage: "<key>",
 		Action:    cmds.removeAction,
+		BashComplete: func(c *cli.Context) {
+			// This will complete if no args are passed
+			if c.NArg() > 0 {
+				return
+			}
+			cmds.completeWithServers()
+		},
 	}
 }
 

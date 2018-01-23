@@ -13,6 +13,13 @@ func (cmds *Commands) newAddCommand() cli.Command {
 		Usage:     "adds server to database",
 		ArgsUsage: "[key]",
 		Action:    cmds.addAction,
+		BashComplete: func(c *cli.Context) {
+			// This will complete if no args are passed
+			if c.NArg() > 0 {
+				return
+			}
+			cmds.completeWithServers()
+		},
 	}
 }
 

@@ -12,6 +12,13 @@ func (cmds *Commands) newAtCommand() cli.Command {
 		Usage:     "executes command on given server",
 		ArgsUsage: "[key] [command]",
 		Action:    cmds.atAction,
+		BashComplete: func(c *cli.Context) {
+			// This will complete if no args are passed
+			if c.NArg() > 0 {
+				return
+			}
+			cmds.completeWithServers()
+		},
 	}
 }
 func (cmds *Commands) atAction(c *cli.Context) (err error) {

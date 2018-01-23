@@ -17,15 +17,17 @@ test:
   script: go test -v ./...
 
 before_deploy:
-  - make BINARY_PATH=sshme compile
-  - make BINARY_PATH=sshme checksum
+  - make build_all
+  - make checksum
 
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
   file:
-    - sshme
-    - sshme.sha256
+    - build/sshme-$TRAVIS_TAG-darwin-amd64
+    - build/sshme-$TRAVIS_TAG-darwin-amd64.sha256
+    - build/sshme-$TRAVIS_TAG-linux-amd64
+    - build/sshme-$TRAVIS_TAG-linux-amd64.sha256
   skip_cleanup: true
   on:
     tags: true

@@ -7,13 +7,7 @@ LDFLAGS=-ldflags "-X=main.version=$(VERSION) -X=main.build=$(BUILD)"
 
 SOURCE_FOLDER := .
 
-BINARY_PATH ?= $(GOPATH)/bin/sshme
-
 GOARCH ?= amd64
-
-ifdef GOOS
-BINARY_PATH :=$(BINARY_PATH).$(GOOS)-$(GOARCH)
-endif
 
 default: build
 
@@ -21,14 +15,15 @@ bootstrap:
 	dep ensure
 
 build_all: vet fmt
-	for GOOS in darwin linux windows; do \
-		$(MAKE) compile GOOS=$$GOOS GOARCH=amd64 ; \
+	for GOOS in darwin linux; do \
+		$(MAKE) compile GOOS=$$GOOS GOARCH=amd64 BINARY=sshme-$(VERSION)-$$GOOS-amd64; \
 	done
 
 compile:
-	CGO_ENABLED=0 go build -v $(LDFLAGS) -o $(BINARY_PATH) $(SOURCE_FOLDER)/cmd
+	CGO_ENABLED=0 go build -v $(LDFLAGS) -o build/$(BINARY) $(SOURCE_FOLDER)/cmd
 
-build: vet fmt compile
+build: vet fmt
+	$(MAKE) compile BINARY=sshme
 
 fmt:
 	go fmt ./cmd ./commands ./db
@@ -43,4 +38,8 @@ test:
 	go test ./cmd ./commands ./db
 
 checksum:
-	openssl sha -sha256 $(BINARY_PATH) > sshme.sha256
+	for GOOS in darwin linux; do \
+		BINARY=build/sshme-$(VERSION)-$$GOOS-amd64; \
+		openssl sha -sha256 $$BINARY > $$BINARY.sha256 ; \
+	done
+

@@ -1,2 +1,3 @@
 vendor
 sshme.sha256
+build/*

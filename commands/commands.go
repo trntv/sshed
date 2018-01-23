@@ -97,6 +97,16 @@ func RegisterCommands(app *cli.App) {
 	}
 }
 
+func (cmds *Commands) completeWithServers() {
+	servers, err := cmds.database.GetAll()
+	if err != nil {
+		return
+	}
+	for key := range servers {
+		fmt.Println(key)
+	}
+}
+
 func (cmds *Commands) askPassword() string {
 	key := ""
 	prompt := &survey.Password{

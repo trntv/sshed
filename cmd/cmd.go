@@ -33,6 +33,8 @@ func main() {
 		},
 	}
 
+	app.EnableBashCompletion = true
+
 	commands.RegisterCommands(app)
 
 	err := app.Run(os.Args)

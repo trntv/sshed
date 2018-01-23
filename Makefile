@@ -16,14 +16,14 @@ bootstrap:
 
 build_all: vet fmt
 	for GOOS in darwin linux; do \
-		$(MAKE) compile GOOS=$$GOOS GOARCH=amd64 BINARY=sshme-$(VERSION)-$$GOOS-amd64; \
+		$(MAKE) compile GOOS=$$GOOS GOARCH=$(GOARCH) BINARY=build/sshme-$(VERSION)-$$GOOS-amd64; \
 	done
 
 compile:
-	CGO_ENABLED=0 go build -v $(LDFLAGS) -o build/$(BINARY) $(SOURCE_FOLDER)/cmd
+	CGO_ENABLED=0 go build -v $(LDFLAGS) -o $(BINARY) $(SOURCE_FOLDER)/cmd
 
 build: vet fmt
-	$(MAKE) compile BINARY=sshme
+	$(MAKE) compile BINARY=build/sshme
 
 fmt:
 	go fmt ./cmd ./commands ./db
@@ -39,7 +39,7 @@ test:
 
 checksum:
 	for GOOS in darwin linux; do \
-		BINARY=build/sshme-$(VERSION)-$$GOOS-amd64; \
+		BINARY=build/sshme-$(VERSION)-$$GOOS-$(GOARCH); \
 		openssl sha -sha256 $$BINARY > $$BINARY.sha256 ; \
 	done
 

@@ -5,9 +5,10 @@ Simple program created to manage list of ssh connections.
 ![Interface](gui.gif)
 
 # Installation
-download binary (make sure to change X.X.X to real version)
+download binary [here](https://github.com/trntv/sshme/releases) 
+or run command (make sure to change X.X.X to real version)
 ```
-curl -L -s https://github.com/trntv/sshme/releases/download/X.X.X/sshme -o sshme
+curl -L -s https://github.com/trntv/sshme/releases/download/X.X.X/sshme-X.X.X-linux-amd64
 ```
 or install with ``go get``
 ```
@@ -66,6 +67,12 @@ GLOBAL OPTIONS:
 
 ```
 
+# Bash (ZSH) autocomplete
+to enable autocomplete run
+```
+PROG=sshme source completions/sshme.bash
+```
+
 # Tips
 to store passwords you need to install sshpass that allows to 
 offer a password via SSH
@@ -94,4 +101,4 @@ Searching for such tool i've found some similar projects but ended up writing my
  - [ ] bind address
  - [ ] replace sshpass with native go implementation
  - [ ] scp
- - [ ] autocompletion
+ - [x] autocompletion

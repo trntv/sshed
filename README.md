@@ -1,6 +1,6 @@
 sshme - SSH connections manager
 ---
-Simple program created to manage list of ssh connections.
+Simple program created to manage bookmarks for ssh connections. Alternative to native ``~/.ssh/config`` approach
 
 ![Interface](gui.gif)
 
@@ -83,12 +83,16 @@ brew install http://git.io/sshpass.rb
 ```
 for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
 
+# Native ssh built-in bookmarks
+[https://blog.viktorpetersson.com/2010/12/05/ssh-tips-how-to-create-ssh-bookmarks.html](https://blog.viktorpetersson.com/2010/12/05/ssh-tips-how-to-create-ssh-bookmarks.html)
+
 # Similar projects
 Searching for such tool i've found some similar projects but ended up writing my own solution:
  - [https://github.com/mmeyer724/sshmenu](https://github.com/mmeyer724/sshmenu)    
  - [https://github.com/vaniacer/sshto](https://github.com/vaniacer/sshto)
  - [https://github.com/xiongharry/sshtoy](https://github.com/xiongharry/sshtoy)
  - [https://github.com/sciancio/connectionmanager2](https://github.com/sciancio/connectionmanager2)
+ - [https://github.com/andreyantipov/ssh-cli-bookmarks](https://github.com/andreyantipov/ssh-cli-bookmarks)
  - etc.
  
 # TODO

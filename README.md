@@ -105,4 +105,5 @@ Searching for such tool i've found some similar projects but ended up writing my
  - [ ] bind address
  - [ ] replace sshpass with native go implementation
  - [ ] scp
+ - [ ] batch commands
  - [x] autocompletion

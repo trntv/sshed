@@ -1,4 +1,4 @@
-sshme - SSH connections manager
+sshme - ssh bookmarks manager
 ---
 Simple program created to manage bookmarks for ssh connections. Alternative to native ``~/.ssh/config`` approach
 

@@ -1,21 +1,25 @@
 package main
 
 import (
-	"os"
-
 	"fmt"
 	"github.com/mgutz/ansi"
-	"github.com/trntv/sshme/commands"
+	"github.com/trntv/sshed/commands"
+	"github.com/trntv/sshed/keychain"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
+	"os"
+	"os/user"
+	"path/filepath"
 )
 
 var version, build string
 
 func main() {
+
 	app := cli.NewApp()
 
-	app.Name = "sshme"
-	app.Usage = "SSH connections manager"
+	app.Name = "sshed"
+	app.Usage = "SSH config editor and hosts manager"
 	app.Author = "Eugene Terentev"
 	app.Email = "eugene@terentev.net"
 
@@ -23,17 +27,48 @@ func main() {
 		app.Version = fmt.Sprintf("%s (build %s)", version, build)
 	}
 
+	usr, _ := user.Current()
+	homeDir := usr.HomeDir
+
 	app.HelpName = "help"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:   "database, db",
-			EnvVar: "SSHME_DB_PATH",
-			Value:  fmt.Sprintf("%s/%s", os.Getenv("HOME"), ".sshdb"),
-			Usage:  "Path to database file",
+			Name:   "keychain",
+			EnvVar: "SSHED_KEYCHAIN",
+			Value:  filepath.Join(homeDir, ".sshed"),
+			Usage:  "path to keychain database",
+		},
+		cli.StringFlag{
+			Name:   "config",
+			EnvVar: "SSHED_CONFIG_FILE",
+			Value:  filepath.Join(homeDir, ".ssh", "config"),
+			Usage:  "path to SSH config file",
+		},
+		cli.StringFlag{
+			Name:   "bin",
+			EnvVar: "SSHED_BIN",
+			Value:  "ssh",
+			Usage:  "path to SSH binary",
 		},
 	}
 
 	app.EnableBashCompletion = true
+
+	app.Before = func(context *cli.Context) error {
+		if context.Command.Name == "help" {
+			return nil
+		}
+
+		err := ssh.Parse(context.String("config"))
+		if err != nil {
+			return err
+		}
+
+		dbpath := context.String("keychain")
+
+		err = keychain.Open(dbpath)
+		return err
+	}
 
 	commands.RegisterCommands(app)
 

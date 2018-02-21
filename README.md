@@ -1,104 +1,99 @@
-sshme - SSH connections manager
+sshed - SSH config editor and hosts manager
 ---
-Simple program created to manage list of ssh connections.
+Visual editor created to manage list of ssh hosts in ssh config file.
+sshed uses native ``ssh_config`` format to store connections information and supports all available ssh options.
 
 ![Interface](gui.gif)
 
 # Installation
-download binary [here](https://github.com/trntv/sshme/releases) 
+download binary [here](https://github.com/trntv/sshed/releases) 
 or run command (make sure to change X.X.X to real version)
 ```
-curl -L -s https://github.com/trntv/sshme/releases/download/X.X.X/sshme-X.X.X-linux-amd64
+curl -L -s https://github.com/trntv/sshed/releases/download/X.X.X/sshed-X.X.X-linux-amd64
 ```
 or install with ``go get``
 ```
-go get -u github.com/trntv/sshme
+go get -u github.com/trntv/sshed
 ```
 or compile it from source
 ```
-git clone https://github.com/trntv/sshme.git
-cd sshme
+git clone https://github.com/trntv/sshed.git
+cd sshed
 make
 ```
 install with brew
 ```
-brew install https://raw.githubusercontent.com/trntv/sshme/master/sshme.rb
+brew install https://raw.githubusercontent.com/trntv/sshed/master/sshed.rb
 ```
 
 # Features
-- add, show, list, remove ssh connections
-- supported fields
-    - Host
-    - Port
-    - User
-    - Password
-    - Key File
-- connect to server by key
-- database encryption
+- add, show, list, remove ssh hosts in ssh_config file
+- show, edit ssh config via preferred text editor
+- connect to host by key
+- execute commands via ssh (on single or multiple hosts)
+- encrypted keychain to store ssh passwords and private keys
 
 # Usage
 ```
 NAME:
-   sshme - SSH connections manager
+   sshed - SSH config editor and hosts manager
 
 USAGE:
    help [global options] command [command options] [arguments...]
 
 VERSION:
-   X.X.X (build xxxxxx)
+   X.X.X
 
 AUTHOR:
    Eugene Terentev <eugene@terentev.net>
 
 COMMANDS:
-     show     show server information
-     list     list all servers from database
-     add      adds server to database
-     remove   removes server from database
-     to       connects to server
-     at       executes command on given server
-     encrypt  encrypt database
+     show     Shows host
+     list     Lists all hosts
+     add      Add or edit host
+     remove   Removes host
+     to       Connects to host
+     at       Executes commands
+     encrypt  Encrypts keychain
+     config   Shows SSH config
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --database value, --db value  Path to database file (default: "$HOME/.sshdb") [$SSHME_DB_PATH]
-   --help, -h                    show help
-   --version, -v                 print the version
-
+   --keychain value  path to keychain database (default: "/Users/e.terentev/.sshed") [$SSHED_KEYCHAIN]
+   --config value    path to SSH config file (default: "/Users/e.terentev/.ssh/config") [$SSHED_CONFIG_FILE]
+   --bin value       path to SSH binary (default: "ssh") [$SSHED_BIN]
+   --help, -h        show help
+   --version, -v     print the version
 ```
 
 # Bash (ZSH) autocomplete
 to enable autocomplete run
 ```
-PROG=sshme source completions/sshme.bash
+PROG=sshed source completions/sshed.bash
 ```
 
 # Tips
-to store passwords you need to install sshpass that allows to 
-offer a password via SSH
+1. to store passwords you need to install sshpass that allows to offer a password via SSH
 
-to install it with brew use
-```
-brew install http://git.io/sshpass.rb
-```
-for other package managers see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
+    to install it with brew use
+    ```
+    brew install http://git.io/sshpass.rb
+    ```
+    for other options see: [https://github.com/kevinburke/sshpass](https://github.com/kevinburke/sshpass)
 
-# Similar projects
-Searching for such tool i've found some similar projects but ended up writing my own solution:
- - [https://github.com/mmeyer724/sshmenu](https://github.com/mmeyer724/sshmenu)    
- - [https://github.com/vaniacer/sshto](https://github.com/vaniacer/sshto)
- - [https://github.com/xiongharry/sshtoy](https://github.com/xiongharry/sshtoy)
- - [https://github.com/sciancio/connectionmanager2](https://github.com/sciancio/connectionmanager2)
- - etc.
- 
+2. To see all available ssh options run ``man ssh_config``
+
 # TODO
- - [x] ``sshme at`` - executes command on server
- - [ ] backup
- - [ ] restore
- - [ ] manage ssh config (view, edit)
- - [ ] additional arguments to ssh command
+ - [x] ``sshed at`` - executes command on server
+ - [x] batch commands
+ - [x] ssh_config integration
+ - [ ] ssh options (-c, -E, -f, -T, -t)
  - [ ] key, password generation
- - [ ] bind address
+ - [x] bind address
  - [ ] replace sshpass with native go implementation
  - [ ] scp
+ - [x] ssh bin flag
  - [x] autocompletion
+ - [ ] backup
+ - [ ] restore
+ - [ ] jump hosts

@@ -1,13 +1,14 @@
 package commands
 
 import (
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
 func (cmds *Commands) newRemoveCommand() cli.Command {
 	return cli.Command{
 		Name:      "remove",
-		Usage:     "removes server from database",
+		Usage:     "Removes host",
 		ArgsUsage: "<key>",
 		Action:    cmds.removeAction,
 		BashComplete: func(c *cli.Context) {
@@ -31,6 +32,6 @@ func (cmds *Commands) removeAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	err = cmds.database.Remove(key)
-	return err
+	ssh.Config.Remove(key)
+	return ssh.Config.Save()
 }

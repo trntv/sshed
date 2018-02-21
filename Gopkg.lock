@@ -8,6 +8,12 @@
   version = "v1.3.1"
 
 [[projects]]
+  name = "github.com/kevinburke/ssh_config"
+  packages = ["."]
+  revision = "0ff8514904a8ebfcfb3c32ad73e1f8498a7f81b4"
+  version = "0.3"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -24,6 +30,12 @@
   name = "github.com/mgutz/ansi"
   packages = ["."]
   revision = "9520e82c474b0a04dd04f8a40959027271bab992"
+
+[[projects]]
+  name = "github.com/pelletier/go-buffruneio"
+  packages = ["."]
+  revision = "c37440a7cf42ac63b919c752ca73a85067e05992"
+  version = "v0.2.0"
 
 [[projects]]
   name = "github.com/urfave/cli"
@@ -50,6 +62,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d8abfa3239a9600aceff7b5ecce110f1afb2fccc87a77a2b1835b3770d69b4e3"
+  inputs-digest = "586a7067cf067ca7c9d4a5d236b6243d3ca461c867e8b024a7ed4b3a3e0f0c5f"
   solver-name = "gps-cdcl"
   solver-version = 1

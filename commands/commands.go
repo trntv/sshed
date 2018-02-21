@@ -3,17 +3,21 @@ package commands
 import (
 	"fmt"
 	"github.com/mgutz/ansi"
-	"github.com/trntv/sshme/db"
+	"github.com/trntv/sshed/host"
+	"github.com/trntv/sshed/keychain"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"os/user"
+	"sort"
 	"strings"
 )
 
 type Commands struct {
-	database *db.DB
+	bin string
 }
 
 type options struct {
@@ -23,40 +27,28 @@ type options struct {
 func RegisterCommands(app *cli.App) {
 	commands := &Commands{}
 
+	beforeFunc := app.Before
 	app.Before = func(context *cli.Context) error {
 
-		if context.Args().First() == "help" {
-			return nil
-		}
-
-		dbpath := context.String("db")
-
-		database, err := db.NewDB(dbpath)
+		err := beforeFunc(context)
 		if err != nil {
 			return err
 		}
 
-		commands.database = database
+		commands.bin = context.String("bin")
 
-		if database.Bootstrapped == false {
-			fmt.Println("Creating database...")
-			res := struct {
-				Encrypt bool
-			}{}
+		if keychain.Bootstrapped == false {
+			fmt.Println("Creating keychain...")
 
-			err = survey.Ask([]*survey.Question{
-				{
-					Name: "Encrypt",
-					Prompt: &survey.Confirm{
-						Message: "Protect database with password?",
-						Default: false,
-					},
-				},
-			}, &res)
+			var encrypt bool
+			err = survey.AskOne(&survey.Confirm{
+				Message: "Protect keychain with password?",
+				Default: false,
+			}, &encrypt, nil)
 
-			if res.Encrypt == true {
+			if encrypt == true {
 				key := commands.askPassword()
-				err = database.EncryptDatabase(key)
+				err = keychain.EncryptDatabase(key)
 				if err != nil {
 					return err
 				}
@@ -65,22 +57,9 @@ func RegisterCommands(app *cli.App) {
 			return nil
 		}
 
-		isEncrypted, err := database.IsEncrypted()
-		if err != nil {
-			return err
-		}
-
-		if isEncrypted == true {
+		if keychain.Encrypted == true {
 			key := commands.askPassword()
-			database.Password = key
-		}
-
-		return nil
-	}
-
-	app.After = func(context *cli.Context) error {
-		if commands.database != nil {
-			return commands.database.Close()
+			keychain.Password = key
 		}
 
 		return nil
@@ -94,15 +73,13 @@ func RegisterCommands(app *cli.App) {
 		commands.newToCommand(),
 		commands.newAtCommand(),
 		commands.newEncryptCommand(),
+		commands.newConfigCommand(),
 	}
 }
 
 func (cmds *Commands) completeWithServers() {
-	servers, err := cmds.database.GetAll()
-	if err != nil {
-		return
-	}
-	for key := range servers {
+	hosts := ssh.Config.GetAll()
+	for key := range hosts {
 		fmt.Println(key)
 	}
 }
@@ -110,7 +87,7 @@ func (cmds *Commands) completeWithServers() {
 func (cmds *Commands) askPassword() string {
 	key := ""
 	prompt := &survey.Password{
-		Message: "Please type your password",
+		Message: "Please type your password:",
 	}
 	survey.AskOne(prompt, &key, nil)
 
@@ -120,41 +97,47 @@ func (cmds *Commands) askPassword() string {
 func (cmds *Commands) askServerKey() (string, error) {
 	var key string
 	options := make([]string, 0)
-	srvs, err := cmds.database.GetAll()
-	if err != nil {
-		return key, err
-	}
+	srvs := ssh.Config.GetAll()
 	for key := range srvs {
 		options = append(options, key)
 	}
+
+	sort.Strings(options)
 	prompt := &survey.Select{
-		Message: "Choose a server:",
-		Options: options,
+		Message:  "Choose server:",
+		Options:  options,
+		PageSize: 16,
 	}
-	err = survey.AskOne(prompt, &key, nil)
+	err := survey.AskOne(prompt, &key, survey.Required)
 
 	return key, err
 }
 
-func (cmds *Commands) printServer(key string, srv *db.Server) {
-	fmt.Printf("  %s: %s\r\n", ansi.Color("Server", "cyan"), ansi.Color(key, "white"))
-
-	f := "  %s: %s\r\n"
-
-	fmt.Printf(f, ansi.Color("Host", "green"), ansi.Color(srv.Host, "white"))
-	fmt.Printf(f, ansi.Color("Port", "green"), ansi.Color(srv.Port, "white"))
-	fmt.Printf(f, ansi.Color("User", "green"), ansi.Color(srv.User, "white"))
-	if srv.KeyFile != "" {
-		fmt.Printf(f, ansi.Color("Key file", "green"), ansi.Color(srv.KeyFile, "white"))
+func (cmds *Commands) askServersKeys() ([]string, error) {
+	var keys []string
+	options := make([]string, 0)
+	srvs := ssh.Config.GetAll()
+	for _, h := range srvs {
+		options = append(options, h.Key)
 	}
+
+	sort.Strings(options)
+	prompt := &survey.MultiSelect{
+		Message:  "Choose servers:",
+		Options:  options,
+		PageSize: 16,
+	}
+	err := survey.AskOne(prompt, &keys, survey.Required)
+
+	return keys, err
 }
 
-func (cmds *Commands) exec(srv *db.Server, options *options, command string) error {
+func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *options, command string) (cmd *exec.Cmd, err error) {
 	var username string
 	if srv.User == "" {
 		u, err := user.Current()
 		if err != nil {
-			return err
+			return nil, err
 		}
 		username = u.Username
 	} else {
@@ -162,21 +145,50 @@ func (cmds *Commands) exec(srv *db.Server, options *options, command string) err
 	}
 
 	var args = make([]string, 0)
-	if srv.Password != "" {
+	if srv.Password() != "" {
 		args = []string{
 			"sshpass",
 			fmt.Sprintf("-p %s", srv.Password),
 		}
 	}
 
-	args = append(args, []string{
-		"ssh",
-		fmt.Sprintf("%s@%s", username, srv.Host),
-		fmt.Sprintf("-p %s", srv.Port),
-	}...)
+	args = append(args, cmds.bin)
+	args = append(args, fmt.Sprintf("-F %s", ssh.Config.Path))
 
-	if srv.KeyFile != "" {
-		args = append(args, fmt.Sprintf("-i %s", srv.KeyFile))
+	if pk := srv.PrivateKey(); pk != "" {
+		tf, err := ioutil.TempFile("", "")
+		defer os.Remove(tf.Name())
+		defer tf.Close()
+
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = tf.Write([]byte(pk))
+		if err != nil {
+			return nil, err
+		}
+
+		err = tf.Chmod(os.FileMode(0600))
+		if err != nil {
+			return nil, err
+		}
+
+		srv.IdentityFile = tf.Name()
+	}
+
+	if srv.User != "" {
+		args = append(args, fmt.Sprintf("%s@%s", username, srv.Hostname))
+	} else {
+		args = append(args, fmt.Sprintf("%s", srv.Hostname))
+	}
+
+	if srv.Port != "" {
+		args = append(args, fmt.Sprintf("-p %s", srv.Port))
+	}
+
+	if srv.IdentityFile != "" {
+		args = append(args, fmt.Sprintf("-i %s", srv.IdentityFile))
 	}
 
 	if options.verbose == true {
@@ -187,12 +199,15 @@ func (cmds *Commands) exec(srv *db.Server, options *options, command string) err
 		args = append(args, command)
 	}
 
-	cmd := exec.Command("sh", "-c", strings.Join(args, " "))
+	if options.verbose == true {
+		fmt.Printf("%s: %s\r\n", ansi.Color("Executing", "green"), strings.Join(args, " "))
+	}
+
+	cmd = exec.Command("sh", "-c", strings.Join(args, " "))
 
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 
-	err := cmd.Run()
-	return err
+	return cmd, err
 }

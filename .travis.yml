@@ -24,10 +24,10 @@ deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
   file:
-    - build/sshme-$TRAVIS_TAG-darwin-amd64
-    - build/sshme-$TRAVIS_TAG-darwin-amd64.sha256
-    - build/sshme-$TRAVIS_TAG-linux-amd64
-    - build/sshme-$TRAVIS_TAG-linux-amd64.sha256
+    - build/sshed-$TRAVIS_TAG-darwin-amd64
+    - build/sshed-$TRAVIS_TAG-darwin-amd64.sha256
+    - build/sshed-$TRAVIS_TAG-linux-amd64
+    - build/sshed-$TRAVIS_TAG-linux-amd64.sha256
   skip_cleanup: true
   on:
     tags: true

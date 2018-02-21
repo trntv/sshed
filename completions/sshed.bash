@@ -1,6 +1,6 @@
 #! /bin/bash
 
-: ${PROG:=sshme}
+: ${PROG:=sshed}
 
 _cli_bash_autocomplete() {
     local cur opts base

@@ -1,4 +1,4 @@
-package db
+package keychain
 
 import (
 	"crypto/aes"
@@ -13,18 +13,19 @@ import (
 
 var metaKey = []byte("encrypted")
 
-func (DB *DB) EncryptDatabase(key string) error {
-	DB.MustOpen()
+func EncryptDatabase(password string) error {
+	mustOpen()
+	defer close()
 
-	records, err := DB.GetAll()
+	records, err := list()
 	if err != nil {
 		return err
 	}
 
-	DB.Password = key
+	Password = password
 
-	err = DB.boltdb.Update(func(tx *bolt.Tx) error {
-		ciphertext, err := DB.encrypt([]byte("plaintext"), key)
+	err = boltdb.Update(func(tx *bolt.Tx) error {
+		ciphertext, err := encrypt([]byte("plaintext"), password)
 		if err != nil {
 			return err
 		}
@@ -35,10 +36,8 @@ func (DB *DB) EncryptDatabase(key string) error {
 		return err
 	})
 
-	DB.Close()
-
 	for key, value := range records {
-		err := DB.Put(key, value)
+		err := Put(key, value)
 		if err != nil {
 			return err
 		}
@@ -47,50 +46,8 @@ func (DB *DB) EncryptDatabase(key string) error {
 	return err
 }
 
-func (DB *DB) IsEncrypted() (bool, error) {
-	var isEncrypted bool
-	DB.MustOpen()
-
-	err := DB.boltdb.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(meta)
-		v := b.Get(metaKey)
-		if v != nil && string(v) != "plaintext" {
-			isEncrypted = true
-		}
-		return nil
-	})
-
-	return isEncrypted, err
-}
-
-func (DB *DB) TestKey(key string) (bool, error) {
-	var isValid bool
-	DB.MustOpen()
-
-	err := DB.boltdb.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket(meta)
-		v := b.Get(metaKey)
-		if v == nil {
-			return nil
-		}
-
-		p, err := DB.decrypt(v, key)
-		if err != nil {
-			return err
-		}
-
-		if string(p) != "plaintext" {
-			isValid = true
-		}
-
-		return nil
-	})
-
-	return isValid, err
-}
-
-func (DB *DB) encrypt(plaintext []byte, password string) ([]byte, error) {
-	cKey, err := DB.makeCipherKey([]byte(password))
+func encrypt(plaintext []byte, password string) ([]byte, error) {
+	cKey, err := makeCipherKey([]byte(password))
 	if err != nil {
 		return nil, err
 	}
@@ -112,8 +69,8 @@ func (DB *DB) encrypt(plaintext []byte, password string) ([]byte, error) {
 	return ciphertext, nil
 }
 
-func (DB *DB) decrypt(ciphertext []byte, password string) ([]byte, error) {
-	cKey, err := DB.makeCipherKey([]byte(password))
+func decrypt(ciphertext []byte, password string) ([]byte, error) {
+	cKey, err := makeCipherKey([]byte(password))
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +95,7 @@ func (DB *DB) decrypt(ciphertext []byte, password string) ([]byte, error) {
 	return plaintext, nil
 }
 
-func (DB *DB) makeCipherKey(data []byte) ([]byte, error) {
+func makeCipherKey(data []byte) ([]byte, error) {
 	hash := md5.New()
 	_, err := hash.Write(data)
 	if err != nil {

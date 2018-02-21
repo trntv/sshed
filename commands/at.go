@@ -1,15 +1,22 @@
 package commands
 
 import (
-	"errors"
-	"github.com/trntv/sshme/db"
+	"bytes"
+	"fmt"
+	"github.com/mgutz/ansi"
+	"github.com/pkg/errors"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
+	"gopkg.in/AlecAivazis/survey.v1"
+	"io/ioutil"
+	"log"
+	"sync"
 )
 
 func (cmds *Commands) newAtCommand() cli.Command {
 	return cli.Command{
 		Name:      "at",
-		Usage:     "executes command on given server",
+		Usage:     "Executes commands",
 		ArgsUsage: "[key] [command]",
 		Action:    cmds.atAction,
 		BashComplete: func(c *cli.Context) {
@@ -22,26 +29,65 @@ func (cmds *Commands) newAtCommand() cli.Command {
 	}
 }
 func (cmds *Commands) atAction(c *cli.Context) (err error) {
-	var key string
-	var srv *db.Server
-
-	if c.NArg() < 2 {
-		return errors.New("server and command must be set")
-	}
-
-	key = c.Args().First()
-	srv, err = cmds.database.Get(key)
-	if err != nil {
-		return err
-	}
-
-	err = cmds.database.Close()
-	if err != nil {
-		return err
+	keys := []string{c.Args().First()}
+	if keys[0] == "" {
+		keys, err = cmds.askServersKeys()
+		if err != nil {
+			return err
+		}
 	}
 
 	command := c.Args().Get(1)
-	cmds.exec(srv, &options{}, command)
+	if command == "" {
+
+		err = survey.AskOne(&survey.Input{Message: "Command:"}, &command, nil)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("")
+	}
+
+	var wg sync.WaitGroup
+	for _, key := range keys {
+		var srv = ssh.Config.Get(key)
+		if srv == nil {
+			return errors.New("host not found")
+		}
+
+		if err != nil {
+			return err
+		}
+
+		wg.Add(1)
+		go (func() {
+			defer wg.Done()
+
+			cmd, err := cmds.createCommand(c, srv, &options{}, command)
+			if err != nil {
+				log.Panicln(err)
+			}
+
+			var buf []byte
+			w := bytes.NewBuffer(buf)
+			cmd.Stdout = w
+
+			err = cmd.Run()
+			if err != nil {
+				log.Panicln(err)
+			}
+
+			sr, err := ioutil.ReadAll(w)
+			if err != nil {
+				log.Panicln(err)
+			}
+
+			fmt.Printf("%s:\r\n", ansi.Color(srv.Key, "yellow"))
+			fmt.Println(string(sr))
+		})()
+	}
+
+	wg.Wait()
 
 	return err
 }

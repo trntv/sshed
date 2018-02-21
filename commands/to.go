@@ -1,14 +1,16 @@
 package commands
 
 import (
-	"github.com/trntv/sshme/db"
+	"github.com/pkg/errors"
+	"github.com/trntv/sshed/host"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
 func (cmds *Commands) newToCommand() cli.Command {
 	return cli.Command{
 		Name:      "to",
-		Usage:     "connects to server",
+		Usage:     "Connects to host",
 		ArgsUsage: "<key>",
 		Flags: []cli.Flag{
 			cli.BoolFlag{
@@ -29,7 +31,7 @@ func (cmds *Commands) newToCommand() cli.Command {
 
 func (cmds *Commands) toAction(c *cli.Context) (err error) {
 	var key string
-	var srv *db.Server
+	var srv *host.Host
 
 	if c.NArg() == 0 {
 		key, err = cmds.askServerKey()
@@ -40,17 +42,15 @@ func (cmds *Commands) toAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	srv, err = cmds.database.Get(key)
+	srv = ssh.Config.Get(key)
+	if srv == nil {
+		return errors.New("host not found")
+	}
+
+	cmd, err := cmds.createCommand(c, srv, &options{verbose: c.Bool("verbose")}, "")
 	if err != nil {
 		return err
 	}
 
-	err = cmds.database.Close()
-	if err != nil {
-		return err
-	}
-
-	cmds.exec(srv, &options{verbose: c.Bool("verbose")}, "")
-
-	return err
+	return cmd.Run()
 }

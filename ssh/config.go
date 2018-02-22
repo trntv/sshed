@@ -34,9 +34,12 @@ type sshConfig struct {
 
 func Parse(path string) (err error) {
 	Config = &sshConfig{Path: path}
-	Config.Content, err = ioutil.ReadFile(path)
-	if err != nil {
-		return err
+
+	if _, err := os.Stat(Config.Path); os.IsNotExist(err) == false {
+		Config.Content, err = ioutil.ReadFile(Config.Path)
+		if err != nil {
+			return err
+		}
 	}
 
 	Config.cfg, err = ssh_config.Decode(bytes.NewReader(Config.Content))

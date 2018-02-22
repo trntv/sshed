@@ -3,7 +3,7 @@ sshed - SSH config editor and hosts manager
 Visual editor created to manage list of ssh hosts in ssh config file.
 sshed uses native ``ssh_config`` format to store connections information and supports all available ssh options.
 
-![Interface](gui.gif)
+[![asciicast](https://asciinema.org/a/164783.png)](https://asciinema.org/a/164783)
 
 # Installation
 download binary [here](https://github.com/trntv/sshed/releases) 

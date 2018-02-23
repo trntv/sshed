@@ -63,7 +63,18 @@ func Parse(path string) (err error) {
 				}
 
 				path = node.(*ssh_config.KV).Value
-				Config.Keys = append(Config.Keys, convertTilde(path))
+				exists := false
+				for _, v := range Config.Keys {
+					v = convertTilde(v)
+					path = convertTilde(path)
+					if  v == path {
+						exists = true
+						break
+					}
+				}
+				if exists == false {
+					Config.Keys = append(Config.Keys, path)
+				}
 			}
 		}
 	}

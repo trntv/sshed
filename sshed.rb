@@ -1,8 +1,8 @@
 class Sshed < Formula
   homepage "https://github.com/trntv/sshed"
-  url "https://github.com/trntv/sshed.git", :tag => "1.0.1"
+  url "https://github.com/trntv/sshed.git", :tag => "1.0.2"
 
-  version "1.0.1"
+  version "1.0.2"
 
   depends_on "go" => :build
   depends_on "dep" => :build

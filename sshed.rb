@@ -1,6 +1,6 @@
 class Sshed < Formula
   homepage "https://github.com/trntv/sshed"
-  url "https://github.com/trntv/sshed.git", :tag => "1.0.0"
+  url "https://github.com/trntv/sshed.git"#, :tag => "1.0.0"
 
   version "1.0.0"
 

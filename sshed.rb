@@ -1,6 +1,7 @@
 class Sshed < Formula
   homepage "https://github.com/trntv/sshed"
   url "https://github.com/trntv/sshed.git", :tag => "1.0.0"
+
   version "1.0.0"
 
   depends_on "go" => :build
@@ -13,7 +14,7 @@ class Sshed < Formula
       system "dep ensure -vendor-only"
       system "make"
       bin.install Dir["build/sshed"]
-      prefix.install Dir["completions"]
+      prefix.install Dir["completions/*"]
     end
   end
 

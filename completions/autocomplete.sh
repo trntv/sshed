@@ -1,6 +1,12 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 : ${PROG:=sshed}
+
+if [ -n "$ZSH_VERSION" ]; then
+  autoload -U compinit && compinit
+  autoload -U bashcompinit && bashcompinit
+fi
+
 
 _cli_bash_autocomplete() {
     local cur opts base

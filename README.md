@@ -1,4 +1,4 @@
-sshed - SSH config editor and hosts manager
+sshed - ssh connections editor and bookmarks manager
 ---
 Visual editor created to manage list of ssh hosts in ssh config file.
 sshed uses native ``ssh_config`` format to store connections information and supports all available ssh options.
@@ -69,7 +69,11 @@ GLOBAL OPTIONS:
 # Bash (ZSH) autocomplete
 to enable autocomplete run
 ```
-PROG=sshed source completions/sshed.bash
+PROG=sshed source completions/autocomplete.sh
+```
+if installed with brew, just add those lines to ``.bash_profile`` (``.zshrc``) file
+```
+PROG=sshed source $(brew --prefix sshed)/autocomplete.sh
 ```
 
 # Tips

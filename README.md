@@ -69,7 +69,11 @@ GLOBAL OPTIONS:
 # Bash (ZSH) autocomplete
 to enable autocomplete run
 ```
-PROG=sshed source completions/sshed.bash
+PROG=sshed source completions/autocomplete.sh
+```
+if installed with brew, just add those lines to ``.bash_profile`` (``.zshrc``) file
+```
+PROG=sshed source $(brew --prefix sshed)/autocomplete.sh
 ```
 
 # Tips

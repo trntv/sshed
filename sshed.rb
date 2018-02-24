@@ -1,6 +1,6 @@
 class Sshed < Formula
+  desc "SSH config and connections manager"
   homepage "https://github.com/trntv/sshed"
-  description "SSH config and connections manager"
   url "https://github.com/trntv/sshed.git", :tag => "1.0.3"
 
   version "1.0.3"

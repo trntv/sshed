@@ -8,6 +8,12 @@
   version = "v1.3.1"
 
 [[projects]]
+  name = "github.com/fatih/color"
+  packages = ["."]
+  revision = "507f6050b8568533fb3f5504de8e5205fa62a114"
+  version = "v1.6.0"
+
+[[projects]]
   name = "github.com/kevinburke/ssh_config"
   packages = ["."]
   revision = "0ff8514904a8ebfcfb3c32ad73e1f8498a7f81b4"
@@ -68,6 +74,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "586a7067cf067ca7c9d4a5d236b6243d3ca461c867e8b024a7ed4b3a3e0f0c5f"
+  inputs-digest = "38b43dce319813ce60ab13fb06bbaa9538d853cd22e0656fe62dc83f50148e06"
   solver-name = "gps-cdcl"
   solver-version = 1

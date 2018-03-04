@@ -1,10 +1,9 @@
 package commands
 
 import (
-	"fmt"
-	"github.com/mgutz/ansi"
 	"github.com/trntv/sshed/keychain"
 	"github.com/urfave/cli"
+	"github.com/fatih/color"
 )
 
 func (cmds *Commands) newEncryptCommand() cli.Command {
@@ -18,7 +17,7 @@ func (cmds *Commands) newEncryptCommand() cli.Command {
 func (cmds *Commands) encryptAction() func(ctx *cli.Context) error {
 	return func(ctx *cli.Context) error {
 		if keychain.Encrypted {
-			fmt.Println(ansi.Color("Keychain is already encrypted", "green"))
+			color.New(color.FgGreen).Println("Keychain is already encrypted", "green")
 		}
 
 		password := cmds.askPassword()

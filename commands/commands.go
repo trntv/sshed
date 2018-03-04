@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/mgutz/ansi"
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/keychain"
 	"github.com/trntv/sshed/ssh"
@@ -14,6 +13,7 @@ import (
 	"os/user"
 	"sort"
 	"strings"
+	"github.com/fatih/color"
 )
 
 type Commands struct {
@@ -199,11 +199,13 @@ func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *opt
 		args = append(args, command)
 	}
 
+	strCommand := strings.Join(args, " ")
+
 	if options.verbose == true {
-		fmt.Printf("%s: %s\r\n", ansi.Color("Executing", "green"), strings.Join(args, " "))
+		color.New(color.FgGreen).Printf("Executing: %s\r\n", strCommand)
 	}
 
-	cmd = exec.Command("sh", "-c", strings.Join(args, " "))
+	cmd = exec.Command("sh", "-c", strCommand)
 
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/mgutz/ansi"
 	"github.com/trntv/sshed/commands"
 	"github.com/trntv/sshed/keychain"
 	"github.com/trntv/sshed/ssh"
@@ -10,6 +9,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"github.com/fatih/color"
 )
 
 var version, build string
@@ -75,7 +75,7 @@ func main() {
 	err := app.Run(os.Args)
 
 	if err != nil {
-		fmt.Println(ansi.Red, fmt.Sprintf("Error: %s", err))
+		color.New(color.FgRed).Printf("Error: %s", err)
 		os.Exit(1)
 	}
 }

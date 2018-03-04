@@ -13,3 +13,11 @@
 [[constraint]]
   name = "github.com/pkg/errors"
   version = "0.8.0"
+
+[[constraint]]
+  name = "github.com/kevinburke/ssh_config"
+  version = "0.3"
+
+[[constraint]]
+  name = "github.com/fatih/color"
+  version = "1.6.0"

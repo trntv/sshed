@@ -3,7 +3,6 @@ package commands
 import (
 	"bytes"
 	"fmt"
-	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
 	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
@@ -11,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"sync"
+	"github.com/fatih/color"
 )
 
 func (cmds *Commands) newAtCommand() cli.Command {
@@ -19,6 +19,12 @@ func (cmds *Commands) newAtCommand() cli.Command {
 		Usage:     "Executes commands",
 		ArgsUsage: "[key] [command]",
 		Action:    cmds.atAction,
+		Flags: []cli.Flag{
+			cli.BoolFlag{
+				Name:  "verbose, v",
+				Usage: "verbose ssh output",
+			},
+		},
 		BashComplete: func(c *cli.Context) {
 			// This will complete if no args are passed
 			if c.NArg() > 0 {
@@ -28,6 +34,7 @@ func (cmds *Commands) newAtCommand() cli.Command {
 		},
 	}
 }
+
 func (cmds *Commands) atAction(c *cli.Context) (err error) {
 	keys := []string{c.Args().First()}
 	if keys[0] == "" {
@@ -63,7 +70,7 @@ func (cmds *Commands) atAction(c *cli.Context) (err error) {
 		go (func() {
 			defer wg.Done()
 
-			cmd, err := cmds.createCommand(c, srv, &options{}, command)
+			cmd, err := cmds.createCommand(c, srv, &options{verbose: true}, command)
 			if err != nil {
 				log.Panicln(err)
 			}
@@ -82,7 +89,7 @@ func (cmds *Commands) atAction(c *cli.Context) (err error) {
 				log.Panicln(err)
 			}
 
-			fmt.Printf("%s:\r\n", ansi.Color(srv.Key, "yellow"))
+			color.New(color.FgYellow).Printf("%s:\r\n", srv.Key, "yellow")
 			fmt.Println(string(sr))
 		})()
 	}

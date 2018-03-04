@@ -1,8 +1,7 @@
 package commands
 
 import (
-	"fmt"
-	"github.com/mgutz/ansi"
+	"github.com/fatih/color"
 	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
@@ -18,13 +17,13 @@ func (cmds *Commands) newListCommand() cli.Command {
 func (cmds *Commands) listAction(ctx *cli.Context) error {
 	hosts := ssh.Config.GetAll()
 	if len(hosts) == 0 {
-		fmt.Println(ansi.Color("Servers list is empty", "red"))
+		color.New(color.FgRed).Println("Servers list is empty")
 		return nil
 	}
 
-	blueColorFunc := ansi.ColorFunc("cyan")
+	cyan := color.New(color.FgCyan).PrintlnFunc()
 	for key := range hosts {
-		fmt.Printf("%s\r\n", blueColorFunc(key))
+		cyan(key)
 	}
 
 	return nil

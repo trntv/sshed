@@ -2,10 +2,10 @@ package commands
 
 import (
 	"fmt"
-	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
 	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
+	"github.com/fatih/color"
 )
 
 func (cmds *Commands) newShowCommand() cli.Command {
@@ -43,11 +43,12 @@ func (cmds *Commands) showAction(c *cli.Context) (err error) {
 
 	f := "%s: %s\r\n"
 
-	fmt.Printf(f, ansi.Color("Hostname", "green"), ansi.Color(srv.Hostname, "white"))
-	fmt.Printf(f, ansi.Color("Port", "green"), ansi.Color(srv.Port, "white"))
-	fmt.Printf(f, ansi.Color("User", "green"), ansi.Color(srv.User, "white"))
+	green := color.New(color.FgGreen).SprintFunc()
+	fmt.Printf(f, green("Hostname"), srv.Hostname)
+	fmt.Printf(f, green("Port"), srv.Port)
+	fmt.Printf(f, green("User"), srv.User)
 	if srv.IdentityFile != "" {
-		fmt.Printf(f, ansi.Color("IdentityFile", "green"), ansi.Color(srv.IdentityFile, "white"))
+		fmt.Printf(f, green("IdentityFile"), srv.IdentityFile)
 	}
 
 	return nil

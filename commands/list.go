@@ -1,7 +1,11 @@
 package commands
 
 import (
+	"bufio"
 	"fmt"
+	"runtime"
+
+	"github.com/mattn/go-colorable"
 	"github.com/mgutz/ansi"
 	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
@@ -24,7 +28,14 @@ func (cmds *Commands) listAction(ctx *cli.Context) error {
 
 	blueColorFunc := ansi.ColorFunc("cyan")
 	for key := range hosts {
-		fmt.Printf("%s\r\n", blueColorFunc(key))
+		if runtime.GOOS == "windows" {
+			stdOut := bufio.NewWriter(colorable.NewColorableStdout())
+			fmt.Fprintln(stdOut, blueColorFunc(key))
+			stdOut.Flush()
+		} else {
+			s := fmt.Sprintf("%s", blueColorFunc(key))
+			fmt.Println(s)
+		}
 	}
 
 	return nil

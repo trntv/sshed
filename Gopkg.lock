@@ -10,8 +10,8 @@
 [[projects]]
   name = "github.com/kevinburke/ssh_config"
   packages = ["."]
-  revision = "0ff8514904a8ebfcfb3c32ad73e1f8498a7f81b4"
-  version = "0.3"
+  revision = "9fc7bb800b555d63157c65a904c86a2cc7b4e795"
+  version = "0.4"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -68,6 +68,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "586a7067cf067ca7c9d4a5d236b6243d3ca461c867e8b024a7ed4b3a3e0f0c5f"
+  inputs-digest = "3001bac81c40019cc28bec83ba4fc9e152e3d0dc70cecb3a03022f1de91f8fdf"
   solver-name = "gps-cdcl"
   solver-version = 1

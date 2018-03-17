@@ -67,7 +67,7 @@ func Parse(path string) (err error) {
 				for _, v := range Config.Keys {
 					v = convertTilde(v)
 					path = convertTilde(path)
-					if  v == path {
+					if v == path {
 						exists = true
 						break
 					}

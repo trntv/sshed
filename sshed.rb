@@ -1,9 +1,9 @@
 class Sshed < Formula
   desc "SSH config and connections manager"
   homepage "https://github.com/trntv/sshed"
-  url "https://github.com/trntv/sshed.git", :tag => "1.0.3"
+  url "https://github.com/trntv/sshed.git", :tag => "1.0.4"
 
-  version "1.0.3"
+  version "1.0.4"
 
   depends_on "go" => :build
   depends_on "dep" => :build

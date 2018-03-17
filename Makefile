@@ -15,7 +15,7 @@ bootstrap:
 	dep ensure
 
 build_all: vet fmt
-	for GOOS in darwin linux; do \
+	for GOOS in darwin linux windows; do \
 		$(MAKE) compile GOOS=$$GOOS GOARCH=$(GOARCH) BINARY=build/sshed-$(VERSION)-$$GOOS-amd64; \
 	done
 
@@ -35,7 +35,7 @@ test:
 	go test $(SOURCE_FOLDER)/...
 
 checksum:
-	for GOOS in darwin linux; do \
+	for GOOS in darwin linux windows; do \
 		BINARY=build/sshed-$(VERSION)-$$GOOS-$(GOARCH); \
 		openssl sha -sha256 $$BINARY > $$BINARY.sha256 ; \
 	done

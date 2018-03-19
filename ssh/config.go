@@ -10,6 +10,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 var Config *sshConfig
@@ -33,7 +34,7 @@ type sshConfig struct {
 }
 
 func Parse(path string) (err error) {
-	Config = &sshConfig{Path: path}
+	Config = &sshConfig{Path: strings.Replace(path, "\\", "\\\\\\", -1)}
 
 	if _, err := os.Stat(Config.Path); os.IsNotExist(err) == false {
 		Config.Content, err = ioutil.ReadFile(Config.Path)

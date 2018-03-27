@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"runtime"
 	"sort"
 	"strings"
 )
@@ -203,7 +204,11 @@ func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *opt
 		fmt.Printf("%s: %s\r\n", ansi.Color("Executing", "green"), strings.Join(args, " "))
 	}
 
-	cmd = exec.Command("sh", "-c", strings.Join(args, " "))
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("cmd", "/C", strings.Join(args, " "))
+	} else {
+		cmd = exec.Command("sh", "-c", strings.Join(args, " "))
+	}
 
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin

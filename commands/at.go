@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/mgutz/ansi"
-	"github.com/pkg/errors"
 	"github.com/trntv/sshed/sshconn"
 	"github.com/trntv/sshed/sshf"
+	"github.com/mgutz/ansi"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 )

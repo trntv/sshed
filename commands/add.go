@@ -18,7 +18,7 @@ type answers struct {
 	Password       string
 	KeyFile        string
 	KeyFileContent string
-	Gateway        string
+	ProxyJump      string
 }
 
 func (cmds *Commands) newAddCommand() cli.Command {
@@ -115,7 +115,7 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 		Port:         answers.Port,
 		User:         answers.User,
 		IdentityFile: answers.KeyFile,
-		Gateway:      answers.Gateway,
+		ProxyJump:    answers.ProxyJump,
 		Options:      make(map[string]string),
 	}
 
@@ -239,7 +239,7 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 func askForJumpHost(answers *answers, srv *host.Host) (err error) {
 	options := make([]string, 0)
 
-	options = append(options, "Without gateway")
+	options = append(options, "Without ProxyJump")
 
 	srvs := sshf.Config.GetAll()
 	for key := range srvs {
@@ -250,10 +250,10 @@ func askForJumpHost(answers *answers, srv *host.Host) (err error) {
 
 	err = survey.AskOne(&survey.Select{
 		Options: options,
-		Message: "Choose gateway server",
+		Message: "Choose ProxyJump",
 	}, &choice, survey.Required)
 
-	answers.Gateway = choice
+	answers.ProxyJump = choice
 
 	if err != nil {
 		return err

@@ -1,10 +1,10 @@
 package commands
 
 import (
-	"github.com/pkg/errors"
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/sshconn"
 	"github.com/trntv/sshed/sshf"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
 

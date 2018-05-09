@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net"
 	"os"
+	"time"
 
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/sshf"
@@ -48,6 +49,7 @@ func getSSHConfig(config *host.Host) *ssh.ClientConfig {
 	}
 
 	return &ssh.ClientConfig{
+		Timeout:         10 * time.Second,
 		User:            config.User,
 		Auth:            auths,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
@@ -61,10 +63,10 @@ func Conn(srv *host.Host) (*ssh.Client, *ssh.Session) {
 
 	config := getSSHConfig(srv)
 
-	if srv.Gateway != "" {
-		proxyConfig := getSSHConfig(sshf.Config.Get(srv.Gateway))
+	if srv.Options["ProxyJump"] != "" {
+		proxyConfig := getSSHConfig(sshf.Config.Get(srv.Options["ProxyJump"]))
 
-		proxyClient, err := ssh.Dial("tcp", net.JoinHostPort(sshf.Config.Get(srv.Gateway).Hostname, sshf.Config.Get(srv.Gateway).Port), proxyConfig)
+		proxyClient, err := ssh.Dial("tcp", net.JoinHostPort(sshf.Config.Get(srv.Options["ProxyJump"]).Hostname, sshf.Config.Get(srv.Options["ProxyJump"]).Port), proxyConfig)
 		if err != nil {
 			panic(err)
 		}

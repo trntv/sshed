@@ -2,9 +2,10 @@ package commands
 
 import (
 	"fmt"
+
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
-	"github.com/trntv/sshed/ssh"
+	"github.com/trntv/sshed/sshf"
 	"github.com/urfave/cli"
 )
 
@@ -36,7 +37,7 @@ func (cmds *Commands) showAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	srv := ssh.Config.Get(key)
+	srv := sshf.Config.Get(key)
 	if srv == nil {
 		return errors.New("host not found")
 	}
@@ -48,6 +49,9 @@ func (cmds *Commands) showAction(c *cli.Context) (err error) {
 	fmt.Printf(f, ansi.Color("User", "green"), ansi.Color(srv.User, "white"))
 	if srv.IdentityFile != "" {
 		fmt.Printf(f, ansi.Color("IdentityFile", "green"), ansi.Color(srv.IdentityFile, "white"))
+	}
+	if srv.Gateway != "" {
+		fmt.Printf(f, ansi.Color("Gateway", "green"), ansi.Color(srv.Gateway, "white"))
 	}
 
 	return nil

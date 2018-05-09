@@ -3,7 +3,8 @@ package commands
 import (
 	"github.com/pkg/errors"
 	"github.com/trntv/sshed/host"
-	"github.com/trntv/sshed/ssh"
+	"github.com/trntv/sshed/sshconn"
+	"github.com/trntv/sshed/sshf"
 	"github.com/urfave/cli"
 )
 
@@ -42,15 +43,15 @@ func (cmds *Commands) toAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	srv = ssh.Config.Get(key)
+	srv = sshf.Config.Get(key)
 	if srv == nil {
 		return errors.New("host not found")
 	}
 
-	cmd, err := cmds.createCommand(c, srv, &options{verbose: c.Bool("verbose")}, "")
-	if err != nil {
-		return err
-	}
+	conn, ses := sshconn.Conn(srv)
+	defer conn.Close()
+	defer ses.Close()
+	sshconn.Shell(ses)
 
-	return cmd.Run()
+	return nil
 }

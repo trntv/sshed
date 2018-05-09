@@ -17,3 +17,7 @@
 [[constraint]]
   name = "github.com/kevinburke/ssh_config"
   version = "0.4"
+
+[[constraint]]
+  name = "golang.org/x/crypto/ssh"
+  version = "1.0"

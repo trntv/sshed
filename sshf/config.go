@@ -1,15 +1,16 @@
-package ssh
+package sshf
 
 import (
 	"bytes"
 	"fmt"
-	"github.com/kevinburke/ssh_config"
-	"github.com/trntv/sshed/host"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
 	"regexp"
+
+	"github.com/kevinburke/ssh_config"
+	"github.com/trntv/sshed/host"
 )
 
 var Config *sshConfig
@@ -135,6 +136,10 @@ func (s *sshConfig) Add(h *host.Host) error {
 
 	if h.IdentityFile != "" {
 		nodes = append(nodes, &ssh_config.KV{Key: "  IdentityFile", Value: h.IdentityFile})
+	}
+
+	if h.Gateway != "Without gateway" {
+		nodes = append(nodes, &ssh_config.KV{Key: "  Gateway", Value: h.Gateway})
 	}
 
 	for key, option := range h.Options {

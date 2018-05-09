@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/mgutz/ansi"
-	"github.com/trntv/sshed/commands"
-	"github.com/trntv/sshed/keychain"
-	"github.com/trntv/sshed/ssh"
-	"github.com/urfave/cli"
 	"os"
 	"os/user"
 	"path/filepath"
+
+	"github.com/trntv/sshed/commands"
+	"github.com/trntv/sshed/keychain"
+	"github.com/trntv/sshed/sshf"
+	"github.com/mgutz/ansi"
+	"github.com/urfave/cli"
 )
 
 var version, build string
@@ -59,7 +60,7 @@ func main() {
 			return nil
 		}
 
-		err := ssh.Parse(context.String("config"))
+		err := sshf.Parse(context.String("config"))
 		if err != nil {
 			return err
 		}

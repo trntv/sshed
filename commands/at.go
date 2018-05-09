@@ -1,16 +1,15 @@
 package commands
 
 import (
-	"bytes"
 	"fmt"
+	"sync"
+
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
-	"github.com/trntv/sshed/ssh"
+	"github.com/trntv/sshed/sshconn"
+	"github.com/trntv/sshed/sshf"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
-	"io/ioutil"
-	"log"
-	"sync"
 )
 
 func (cmds *Commands) newAtCommand() cli.Command {
@@ -20,7 +19,6 @@ func (cmds *Commands) newAtCommand() cli.Command {
 		ArgsUsage: "[key] [command]",
 		Action:    cmds.atAction,
 		BashComplete: func(c *cli.Context) {
-			// This will complete if no args are passed
 			if c.NArg() > 0 {
 				return
 			}
@@ -50,7 +48,7 @@ func (cmds *Commands) atAction(c *cli.Context) (err error) {
 
 	var wg sync.WaitGroup
 	for _, key := range keys {
-		var srv = ssh.Config.Get(key)
+		var srv = sshf.Config.Get(key)
 		if srv == nil {
 			return errors.New("host not found")
 		}
@@ -63,27 +61,13 @@ func (cmds *Commands) atAction(c *cli.Context) (err error) {
 		go (func() {
 			defer wg.Done()
 
-			cmd, err := cmds.createCommand(c, srv, &options{}, command)
-			if err != nil {
-				log.Panicln(err)
-			}
-
-			var buf []byte
-			w := bytes.NewBuffer(buf)
-			cmd.Stdout = w
-
-			err = cmd.Run()
-			if err != nil {
-				log.Panicln(err)
-			}
-
-			sr, err := ioutil.ReadAll(w)
-			if err != nil {
-				log.Panicln(err)
-			}
+			conn, ses := sshconn.Conn(srv)
+			defer conn.Close()
+			defer ses.Close()
+			out, _ := sshconn.RunCmd(ses, command)
 
 			fmt.Printf("%s:\r\n", ansi.Color(srv.Key, "yellow"))
-			fmt.Println(string(sr))
+			fmt.Println(string(out))
 		})()
 	}
 

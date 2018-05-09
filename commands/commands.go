@@ -2,12 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/mgutz/ansi"
-	"github.com/trntv/sshed/host"
-	"github.com/trntv/sshed/keychain"
-	"github.com/trntv/sshed/ssh"
-	"github.com/urfave/cli"
-	"gopkg.in/AlecAivazis/survey.v1"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -15,6 +9,13 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+
+	"github.com/trntv/sshed/host"
+	"github.com/trntv/sshed/keychain"
+	"github.com/trntv/sshed/sshf"
+	"github.com/mgutz/ansi"
+	"github.com/urfave/cli"
+	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 type Commands struct {
@@ -79,7 +80,7 @@ func RegisterCommands(app *cli.App) {
 }
 
 func (cmds *Commands) completeWithServers() {
-	hosts := ssh.Config.GetAll()
+	hosts := sshf.Config.GetAll()
 	for key := range hosts {
 		fmt.Println(key)
 	}
@@ -98,7 +99,7 @@ func (cmds *Commands) askPassword() string {
 func (cmds *Commands) askServerKey() (string, error) {
 	var key string
 	options := make([]string, 0)
-	srvs := ssh.Config.GetAll()
+	srvs := sshf.Config.GetAll()
 	for key := range srvs {
 		options = append(options, key)
 	}
@@ -117,7 +118,7 @@ func (cmds *Commands) askServerKey() (string, error) {
 func (cmds *Commands) askServersKeys() ([]string, error) {
 	var keys []string
 	options := make([]string, 0)
-	srvs := ssh.Config.GetAll()
+	srvs := sshf.Config.GetAll()
 	for _, h := range srvs {
 		options = append(options, h.Key)
 	}
@@ -154,7 +155,7 @@ func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *opt
 	}
 
 	args = append(args, cmds.bin)
-	args = append(args, fmt.Sprintf("-F %s", ssh.Config.Path))
+	args = append(args, fmt.Sprintf("-F %s", sshf.Config.Path))
 
 	if pk := srv.PrivateKey(); pk != "" {
 		tf, err := ioutil.TempFile("", "")

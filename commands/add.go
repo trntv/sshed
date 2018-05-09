@@ -1,12 +1,13 @@
 package commands
 
 import (
+	"os/user"
+
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/keychain"
-	"github.com/trntv/sshed/ssh"
+	"github.com/trntv/sshed/sshf"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
-	"os/user"
 )
 
 type answers struct {
@@ -17,6 +18,7 @@ type answers struct {
 	Password       string
 	KeyFile        string
 	KeyFileContent string
+	Gateway        string
 }
 
 func (cmds *Commands) newAddCommand() cli.Command {
@@ -42,7 +44,7 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 	var key = c.Args().First()
 
 	if key != "" {
-		h = ssh.Config.Get(key)
+		h = sshf.Config.Get(key)
 	}
 
 	if h == nil {
@@ -105,12 +107,15 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 
 	askForIdentityFile(answers, h)
 
+	askForJumpHost(answers, h)
+
 	h = &host.Host{
 		Key:          answers.Key,
 		Hostname:     answers.Host,
 		Port:         answers.Port,
 		User:         answers.User,
 		IdentityFile: answers.KeyFile,
+		Gateway:      answers.Gateway,
 		Options:      make(map[string]string),
 	}
 
@@ -161,9 +166,9 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 		return err
 	}
 
-	ssh.Config.Add(h)
+	sshf.Config.Add(h)
 
-	return ssh.Config.Save()
+	return sshf.Config.Save()
 }
 
 func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
@@ -193,7 +198,7 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 		OPTION_SKIP,
 	}
 
-	if len(ssh.Config.Keys) > 0 {
+	if len(sshf.Config.Keys) > 0 {
 		options = append(options, OPTION_SELECT)
 	}
 
@@ -213,7 +218,7 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 		return
 	case OPTION_SELECT:
 		err = survey.AskOne(&survey.Select{
-			Options: ssh.Config.Keys,
+			Options: sshf.Config.Keys,
 			Message: "Choose private key:",
 			Default: srv.IdentityFile,
 		}, &answers.KeyFile, nil)
@@ -226,6 +231,32 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 		err = survey.AskOne(&survey.Editor{
 			Message: "Private key content:",
 		}, &answers.KeyFileContent, nil)
+	}
+
+	return err
+}
+
+func askForJumpHost(answers *answers, srv *host.Host) (err error) {
+	options := make([]string, 0)
+
+	options = append(options, "Without gateway")
+
+	srvs := sshf.Config.GetAll()
+	for key := range srvs {
+		options = append(options, key)
+	}
+
+	var choice string
+
+	err = survey.AskOne(&survey.Select{
+		Options: options,
+		Message: "Choose gateway server",
+	}, &choice, survey.Required)
+
+	answers.Gateway = choice
+
+	if err != nil {
+		return err
 	}
 
 	return err

@@ -1,10 +1,9 @@
 package commands
 
 import (
-	"github.com/trntv/sshed/host"
-	"github.com/trntv/sshed/sshconn"
-	"github.com/trntv/sshed/sshf"
 	"github.com/pkg/errors"
+	"github.com/trntv/sshed/host"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
@@ -43,15 +42,17 @@ func (cmds *Commands) toAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	srv = sshf.Config.Get(key)
+	srv = ssh.Config.Get(key)
 	if srv == nil {
 		return errors.New("host not found")
 	}
 
-	conn, ses := sshconn.Conn(srv)
-	defer conn.Close()
+	clients, ses := ssh.Conn(srv)
+	for _, client := range clients {
+		defer client.Close()
+	}
 	defer ses.Close()
-	sshconn.Shell(ses)
+	ssh.Shell(ses)
 
 	return nil
 }

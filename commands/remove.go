@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/trntv/sshed/sshf"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
@@ -32,6 +32,6 @@ func (cmds *Commands) removeAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	sshf.Config.Remove(key)
-	return sshf.Config.Save()
+	ssh.Config.Remove(key)
+	return ssh.Config.Save()
 }

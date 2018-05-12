@@ -3,9 +3,9 @@ package commands
 import (
 	"fmt"
 
-	"github.com/trntv/sshed/sshf"
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
@@ -37,7 +37,7 @@ func (cmds *Commands) showAction(c *cli.Context) (err error) {
 		key = c.Args().First()
 	}
 
-	srv := sshf.Config.Get(key)
+	srv := ssh.Config.Get(key)
 	if srv == nil {
 		return errors.New("host not found")
 	}

@@ -5,7 +5,7 @@ import (
 
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/keychain"
-	"github.com/trntv/sshed/sshf"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 )
@@ -44,7 +44,7 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 	var key = c.Args().First()
 
 	if key != "" {
-		h = sshf.Config.Get(key)
+		h = ssh.Config.Get(key)
 	}
 
 	if h == nil {
@@ -166,9 +166,9 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 		return err
 	}
 
-	sshf.Config.Add(h)
+	ssh.Config.Add(h)
 
-	return sshf.Config.Save()
+	return ssh.Config.Save()
 }
 
 func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
@@ -198,7 +198,7 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 		OPTION_SKIP,
 	}
 
-	if len(sshf.Config.Keys) > 0 {
+	if len(ssh.Config.Keys) > 0 {
 		options = append(options, OPTION_SELECT)
 	}
 
@@ -218,7 +218,7 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 		return
 	case OPTION_SELECT:
 		err = survey.AskOne(&survey.Select{
-			Options: sshf.Config.Keys,
+			Options: ssh.Config.Keys,
 			Message: "Choose private key:",
 			Default: srv.IdentityFile,
 		}, &answers.KeyFile, nil)
@@ -241,9 +241,11 @@ func askForJumpHost(answers *answers, srv *host.Host) (err error) {
 
 	options = append(options, "Without ProxyJump")
 
-	srvs := sshf.Config.GetAll()
+	srvs := ssh.Config.GetAll()
 	for key := range srvs {
-		options = append(options, key)
+		if key != answers.Key {
+			options = append(options, key)
+		}
 	}
 
 	var choice string

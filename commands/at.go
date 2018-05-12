@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/trntv/sshed/sshconn"
-	"github.com/trntv/sshed/sshf"
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 )
@@ -48,7 +47,7 @@ func (cmds *Commands) atAction(c *cli.Context) (err error) {
 
 	var wg sync.WaitGroup
 	for _, key := range keys {
-		var srv = sshf.Config.Get(key)
+		var srv = ssh.Config.Get(key)
 		if srv == nil {
 			return errors.New("host not found")
 		}
@@ -61,11 +60,12 @@ func (cmds *Commands) atAction(c *cli.Context) (err error) {
 		go (func() {
 			defer wg.Done()
 
-			conn, ses := sshconn.Conn(srv)
-			defer conn.Close()
+			clients, ses := ssh.Conn(srv)
+			for _, client := range clients {
+				defer client.Close()
+			}
 			defer ses.Close()
-			out, _ := sshconn.RunCmd(ses, command)
-
+			out, _ := ssh.RunCmd(ses, command)
 			fmt.Printf("%s:\r\n", ansi.Color(srv.Key, "yellow"))
 			fmt.Println(string(out))
 		})()

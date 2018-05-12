@@ -1,4 +1,4 @@
-package sshf
+package ssh
 
 import (
 	"bytes"
@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/trntv/sshed/host"
 	"github.com/kevinburke/ssh_config"
+	"github.com/trntv/sshed/host"
 )
 
 var Config *sshConfig

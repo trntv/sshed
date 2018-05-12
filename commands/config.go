@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/trntv/sshed/sshf"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 )
@@ -24,7 +24,7 @@ func (cmds *Commands) newConfigCommand() cli.Command {
 }
 
 func (cmds *Commands) configAction(ctx *cli.Context) error {
-	fmt.Print(string(sshf.Config.Content))
+	fmt.Print(string(ssh.Config.Content))
 
 	return nil
 }
@@ -33,7 +33,7 @@ func (cmds *Commands) configEditAction(ctx *cli.Context) (err error) {
 	var content string
 	err = survey.AskOne(&survey.Editor{
 		Message:       "",
-		Default:       sshf.Config.String(),
+		Default:       ssh.Config.String(),
 		HideDefault:   true,
 		AppendDefault: true,
 	}, &content, nil)
@@ -41,7 +41,7 @@ func (cmds *Commands) configEditAction(ctx *cli.Context) (err error) {
 		return err
 	}
 
-	err = sshf.Config.SaveContent([]byte(content))
+	err = ssh.Config.SaveContent([]byte(content))
 
 	return err
 }

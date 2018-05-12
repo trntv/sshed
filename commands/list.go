@@ -3,8 +3,8 @@ package commands
 import (
 	"fmt"
 
-	"github.com/trntv/sshed/sshf"
 	"github.com/mgutz/ansi"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
@@ -17,7 +17,7 @@ func (cmds *Commands) newListCommand() cli.Command {
 }
 
 func (cmds *Commands) listAction(ctx *cli.Context) error {
-	hosts := sshf.Config.GetAll()
+	hosts := ssh.Config.GetAll()
 	if len(hosts) == 0 {
 		fmt.Println(ansi.Color("Servers list is empty", "red"))
 		return nil

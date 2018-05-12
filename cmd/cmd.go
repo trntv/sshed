@@ -6,10 +6,10 @@ import (
 	"os/user"
 	"path/filepath"
 
+	"github.com/mgutz/ansi"
 	"github.com/trntv/sshed/commands"
 	"github.com/trntv/sshed/keychain"
-	"github.com/trntv/sshed/sshf"
-	"github.com/mgutz/ansi"
+	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
@@ -60,7 +60,7 @@ func main() {
 			return nil
 		}
 
-		err := sshf.Parse(context.String("config"))
+		err := ssh.Parse(context.String("config"))
 		if err != nil {
 			return err
 		}

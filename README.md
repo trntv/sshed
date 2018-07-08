@@ -87,6 +87,14 @@ PROG=sshed source $(brew --prefix sshed)/autocomplete.sh
 
 2. To see all available ssh options run ``man ssh_config``
 
+# Make local 
+```
+find . -name "*.go" | xargs sed -i 's|github.com/trntv/sshed|..|g'
+make
+# GO BACK
+find . -name "*.go" | xargs grep -nP "\x22\.\./[a-z]+\x22" | awk '{split($1, arr, ":");system("sed -i \'"arr[2]"s|../|github.com/trntv/sshed/|g\' "arr[1])}'
+```
+
 # TODO
  - [x] ``sshed at`` - executes command on server
  - [x] batch commands
@@ -94,10 +102,10 @@ PROG=sshed source $(brew --prefix sshed)/autocomplete.sh
  - [ ] ssh options (-c, -E, -f, -T, -t)
  - [ ] key, password generation
  - [x] bind address
- - [ ] replace sshpass with native go implementation
+ - [x] replace sshpass with native go implementation
  - [ ] scp
  - [x] ssh bin flag
  - [x] autocompletion
  - [ ] backup
  - [ ] restore
- - [ ] jump hosts
+ - [x] jump hosts

@@ -1,12 +1,13 @@
 package commands
 
 import (
+	"os/user"
+
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/keychain"
 	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
-	"os/user"
 )
 
 type answers struct {
@@ -17,6 +18,7 @@ type answers struct {
 	Password       string
 	KeyFile        string
 	KeyFileContent string
+	ProxyJump      string
 }
 
 func (cmds *Commands) newAddCommand() cli.Command {
@@ -105,12 +107,15 @@ func (cmds *Commands) addAction(c *cli.Context) error {
 
 	askForIdentityFile(answers, h)
 
+	askForJumpHost(answers, h)
+
 	h = &host.Host{
 		Key:          answers.Key,
 		Hostname:     answers.Host,
 		Port:         answers.Port,
 		User:         answers.User,
 		IdentityFile: answers.KeyFile,
+		ProxyJump:    answers.ProxyJump,
 		Options:      make(map[string]string),
 	}
 
@@ -226,6 +231,34 @@ func askForIdentityFile(answers *answers, srv *host.Host) (err error) {
 		err = survey.AskOne(&survey.Editor{
 			Message: "Private key content:",
 		}, &answers.KeyFileContent, nil)
+	}
+
+	return err
+}
+
+func askForJumpHost(answers *answers, srv *host.Host) (err error) {
+	options := make([]string, 0)
+
+	options = append(options, "Without ProxyJump")
+
+	srvs := ssh.Config.GetAll()
+	for key := range srvs {
+		if key != answers.Key {
+			options = append(options, key)
+		}
+	}
+
+	var choice string
+
+	err = survey.AskOne(&survey.Select{
+		Options: options,
+		Message: "Choose ProxyJump",
+	}, &choice, survey.Required)
+
+	answers.ProxyJump = choice
+
+	if err != nil {
+		return err
 	}
 
 	return err

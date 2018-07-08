@@ -1,9 +1,10 @@
 package host
 
 import (
-	"github.com/kevinburke/ssh_config"
-	"github.com/trntv/sshed/keychain"
 	"strings"
+
+	"github.com/trntv/sshed/keychain"
+	"github.com/kevinburke/ssh_config"
 )
 
 type Host struct {
@@ -12,6 +13,7 @@ type Host struct {
 	Port         string
 	User         string
 	IdentityFile string
+	ProxyJump    string
 
 	Options map[string]string
 
@@ -35,6 +37,8 @@ func CreateFromConfig(h *ssh_config.Host) *Host {
 				hh.User = c.Value
 			case "identityfile":
 				hh.IdentityFile = c.Value
+			case "ProxyJump":
+				hh.ProxyJump = c.Value
 			default:
 				hh.Options[c.Key] = c.Value
 			}

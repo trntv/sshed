@@ -2,9 +2,10 @@ package commands
 
 import (
 	"fmt"
+
+	"github.com/trntv/sshed/ssh"
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
-	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 
@@ -48,6 +49,9 @@ func (cmds *Commands) showAction(c *cli.Context) (err error) {
 	fmt.Printf(f, ansi.Color("User", "green"), ansi.Color(srv.User, "white"))
 	if srv.IdentityFile != "" {
 		fmt.Printf(f, ansi.Color("IdentityFile", "green"), ansi.Color(srv.IdentityFile, "white"))
+	}
+	if srv.Options["ProxyJump"] != "" {
+		fmt.Printf(f, ansi.Color("ProxyJump", "green"), ansi.Color(srv.Options["ProxyJump"], "white"))
 	}
 
 	return nil

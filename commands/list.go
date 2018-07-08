@@ -2,8 +2,9 @@ package commands
 
 import (
 	"fmt"
-	"github.com/mgutz/ansi"
+
 	"github.com/trntv/sshed/ssh"
+	"github.com/mgutz/ansi"
 	"github.com/urfave/cli"
 )
 

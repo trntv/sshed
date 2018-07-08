@@ -3,13 +3,14 @@ package ssh
 import (
 	"bytes"
 	"fmt"
-	"github.com/kevinburke/ssh_config"
-	"github.com/trntv/sshed/host"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
 	"regexp"
+
+	"github.com/trntv/sshed/host"
+	"github.com/kevinburke/ssh_config"
 )
 
 var Config *sshConfig
@@ -135,6 +136,10 @@ func (s *sshConfig) Add(h *host.Host) error {
 
 	if h.IdentityFile != "" {
 		nodes = append(nodes, &ssh_config.KV{Key: "  IdentityFile", Value: h.IdentityFile})
+	}
+
+	if h.ProxyJump != "Without ProxyJump" {
+		nodes = append(nodes, &ssh_config.KV{Key: "  ProxyJump", Value: h.ProxyJump})
 	}
 
 	for key, option := range h.Options {

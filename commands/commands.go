@@ -10,10 +10,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/mgutz/ansi"
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/keychain"
 	"github.com/trntv/sshed/ssh"
+	"github.com/mgutz/ansi"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 )

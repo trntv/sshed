@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"github.com/pkg/errors"
 	"github.com/trntv/sshed/host"
 	"github.com/trntv/sshed/ssh"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
 
@@ -52,7 +52,7 @@ func (cmds *Commands) toAction(c *cli.Context) (err error) {
 		defer client.Close()
 	}
 	defer ses.Close()
-	ssh.Shell(ses)
+	ssh.Shell(ses, key)
 
 	return nil
 }

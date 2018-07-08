@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/trntv/sshed/ssh"
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
-	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
 )

@@ -3,9 +3,9 @@ package commands
 import (
 	"fmt"
 
+	"github.com/trntv/sshed/ssh"
 	"github.com/mgutz/ansi"
 	"github.com/pkg/errors"
-	"github.com/trntv/sshed/ssh"
 	"github.com/urfave/cli"
 )
 

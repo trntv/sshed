@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/kevinburke/ssh_config"
 	"github.com/trntv/sshed/host"
+	"github.com/kevinburke/ssh_config"
 )
 
 var Config *sshConfig

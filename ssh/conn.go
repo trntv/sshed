@@ -2,9 +2,12 @@ package ssh
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net"
 	"os"
+	"os/exec"
+	"os/user"
 	"time"
 
 	"github.com/trntv/sshed/host"
@@ -12,6 +15,13 @@ import (
 	"golang.org/x/crypto/ssh/agent"
 	"golang.org/x/crypto/ssh/terminal"
 )
+
+type jsonconf struct {
+	Cmd   string
+	Bargs string
+	Aargs string
+	Hosts []string
+}
 
 func getKeyFile(keypath string) (gossh.Signer, error) {
 	buf, err := ioutil.ReadFile(keypath)
@@ -67,6 +77,7 @@ func Conn(srv *host.Host) ([]*gossh.Client, *gossh.Session) {
 
 	key := srv.Key
 	Hosts = append(Hosts, srv)
+
 	for {
 		c := Config.Get(key).Options
 		if _, ok := c["ProxyJump"]; ok {
@@ -132,12 +143,30 @@ func Conn(srv *host.Host) ([]*gossh.Client, *gossh.Session) {
 	return Clients, session
 }
 
+func contains(arr []string, str string) bool {
+	for _, a := range arr {
+		if a == str {
+			return true
+		}
+	}
+	return false
+}
+
 // Shell Remote Terminal Attachment
-func Shell(session *gossh.Session) {
+func Shell(session *gossh.Session, host string) {
 	session.Stdin = os.Stdin
 	session.Stdout = os.Stdout
 	session.Stderr = os.Stderr
 
+	user, _ := user.Current()
+	var jsonConf jsonconf
+	file, err := ioutil.ReadFile(user.HomeDir + "/.sshed.config")
+	if err == nil {
+		json.Unmarshal(file, &jsonConf)
+		if contains(jsonConf.Hosts, host) {
+			exec.Command(jsonConf.Cmd, jsonConf.Bargs).Run()
+		}
+	}
 	modes := gossh.TerminalModes{
 		gossh.ECHO:          1,
 		gossh.ECHOCTL:       0,
@@ -155,6 +184,11 @@ func Shell(session *gossh.Session) {
 	session.RequestPty(os.Getenv("TERM"), h, w, modes)
 	session.Shell()
 	session.Wait()
+	if err == nil {
+		if contains(jsonConf.Hosts, host) {
+			exec.Command(jsonConf.Cmd, jsonConf.Aargs).Run()
+		}
+	}
 }
 
 // RunCmd Run Command in Remote Host

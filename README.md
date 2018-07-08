@@ -91,6 +91,8 @@ PROG=sshed source $(brew --prefix sshed)/autocomplete.sh
 ```
 find . -name "*.go" | xargs sed -i 's|github.com/trntv/sshed|..|g'
 make
+# GO BACK
+find . -name "*.go" | xargs grep -nP "\x22\.\./[a-z]+\x22" | awk '{split($1, arr, ":");system("sed -i \'"arr[2]"s|../|github.com/trntv/sshed/|g\' "arr[1])}'
 ```
 
 # TODO

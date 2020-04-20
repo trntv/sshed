@@ -9,7 +9,7 @@ sshed uses native ``ssh_config`` format to store connections information and sup
 download binary [here](https://github.com/trntv/sshed/releases) 
 or run command (make sure to change X.X.X to real version)
 ```
-curl -L -s https://github.com/trntv/sshed/releases/download/X.X.X/sshed-X.X.X-linux-amd64
+curl -sf https://gobinaries.com/trntv/sshed | sh
 ```
 or install with ``go get``
 ```

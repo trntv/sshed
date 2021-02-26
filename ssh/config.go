@@ -32,25 +32,25 @@ type sshConfig struct {
 	cfg  *ssh_config.Config
 }
 
-func Parse(path string) (err error) {
-	Config = &sshConfig{Path: path}
+func Parse(path string) (conf *sshConfig, err error) {
+	conf = &sshConfig{Path: path}
 
-	if _, err := os.Stat(Config.Path); os.IsNotExist(err) == false {
-		Config.Content, err = ioutil.ReadFile(Config.Path)
+	if _, err := os.Stat(conf.Path); os.IsNotExist(err) == false {
+		conf.Content, err = ioutil.ReadFile(conf.Path)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	Config.cfg, err = ssh_config.Decode(bytes.NewReader(Config.Content))
+	conf.cfg, err = ssh_config.Decode(bytes.NewReader(conf.Content))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	for _, h := range Config.cfg.Hosts {
+	for _, h := range conf.cfg.Hosts {
 		for _, pattern := range h.Patterns {
 			if maskPatternRegexp.MatchString(pattern.String()) == false {
-				Config.Hosts = append(Config.Hosts, pattern.String())
+				conf.Hosts = append(conf.Hosts, pattern.String())
 			}
 		}
 
@@ -64,7 +64,7 @@ func Parse(path string) (err error) {
 
 				path = node.(*ssh_config.KV).Value
 				exists := false
-				for _, v := range Config.Keys {
+				for _, v := range conf.Keys {
 					v = convertTilde(v)
 					path = convertTilde(path)
 					if v == path {
@@ -73,13 +73,13 @@ func Parse(path string) (err error) {
 					}
 				}
 				if exists == false {
-					Config.Keys = append(Config.Keys, path)
+					conf.Keys = append(conf.Keys, path)
 				}
 			}
 		}
 	}
 
-	return nil
+	return conf, nil
 }
 
 func (s *sshConfig) Get(k string) (h *host.Host) {

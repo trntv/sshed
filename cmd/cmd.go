@@ -59,7 +59,8 @@ func main() {
 			return nil
 		}
 
-		err := ssh.Parse(context.String("config"))
+		var err error
+		ssh.Config, err = ssh.Parse(context.String("config"))
 		if err != nil {
 			return err
 		}

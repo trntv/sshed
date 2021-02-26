@@ -1,6 +1,6 @@
 sshed - ssh connections editor and bookmarks manager
 ---
-Visual cross-platform editor created to manage list of ssh hosts in ssh config file.
+Visual cross-platform editor created to manage list of SSH hosts in ssh config file and execute commands on those hosts.
 sshed uses native ``ssh_config`` format to store connections information and supports all available ssh options.
 
 [![asciicast](https://asciinema.org/a/164783.png)](https://asciinema.org/a/164783)
@@ -23,7 +23,7 @@ make
 ```
 install with brew
 ```
-brew install https://raw.githubusercontent.com/trntv/sshed/master/sshed.rb
+brew install trntv/sshed
 ```
 
 # Features

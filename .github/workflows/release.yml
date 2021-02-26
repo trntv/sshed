@@ -16,13 +16,6 @@ jobs:
         with:
           go-version: 1.16.x
 
-      - name: Docker login
-        uses: azure/docker-login@v1
-        with:
-          login-server: 'https://index.docker.io/v1/'
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:

@@ -55,12 +55,6 @@ brews:
         bin.install "sshed"
         bash_completion.install "completions/autocomplete.sh"
       
-dockers:
-  - image_templates:
-      - "docker.io/trntv/sshed:latest"
-      - "docker.io/trntv/sshed:{{ .Tag }}"
-    skip_push: auto
-
 scoop:
   bucket:
     owner: trntv

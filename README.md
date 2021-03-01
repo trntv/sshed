@@ -6,24 +6,23 @@ sshed uses native ``ssh_config`` format to store connections information and sup
 [![asciicast](https://asciinema.org/a/164783.svg)](https://asciinema.org/a/164783)
 
 # Installation
-download binary [here](https://github.com/trntv/sshed/releases) 
-or run command (make sure to change X.X.X to real version)
+install with brew
+```
+brew install trntv/sshed
+```
+install with scoop
+```
+scoop bucket add taskctl https://github.com/trntv/scoop-sshed.git
+scoop install sshed
+```
+download binary [here](https://github.com/trntv/sshed/releases)
+or run in console
 ```
 curl -sf https://gobinaries.com/trntv/sshed | sh
 ```
 or install with ``go get``
 ```
-go get -u github.com/trntv/sshed
-```
-or compile it from source
-```
-git clone https://github.com/trntv/sshed.git
-cd sshed
-make
-```
-install with brew
-```
-brew install trntv/sshed
+go get -u github.com/trntv/sshed/sshed
 ```
 
 # Features

@@ -8,7 +8,7 @@ sshed uses native ``ssh_config`` format to store connections information and sup
 # Installation
 install with brew
 ```
-brew install trntv/sshed
+brew install trntv/sshed/sshed
 ```
 install with scoop
 ```

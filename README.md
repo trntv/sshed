@@ -22,7 +22,7 @@ curl -sf https://gobinaries.com/trntv/sshed | sh
 ```
 or install with ``go get``
 ```
-go get -u github.com/trntv/sshed/sshed
+go get -u github.com/trntv/sshed
 ```
 
 # Features

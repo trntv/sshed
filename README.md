@@ -1,3 +1,17 @@
+# Stand with Ukraine!
+
+---
+<p align="center">
+   <img align="center" src="https://github.blog/wp-content/uploads/2022/03/1200x630-GitHub-1.png?resize=320%2C240">
+</p>
+While Russia is destroying my home and my country, killing my friends and neighbors - any russian company, organization, or citizen, who do nothing about it,
+is prohibited from using this package.
+For others - please, pray for us, share information about war crimes Russia is conducting in Ukraine, do everything you can
+to urge your governments to be on the right side of history.
+Ukraine will prevail! Good triumph over evil! Русский военный корабль, иди нах#й!
+
+---
+
 SSHed - ssh connections manager and config editor
 ---
 Visual cross-platform editor created to manage list of SSH hosts in ssh config file and execute commands on those hosts.

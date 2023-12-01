@@ -147,9 +147,10 @@ func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *opt
 
 	var args = make([]string, 0)
 	if srv.Password() != "" {
+		var password = strings.Replace(srv.Password(), "'", "\\'", -1)
 		args = []string{
 			"sshpass",
-			fmt.Sprintf("-p %s", srv.Password()),
+			fmt.Sprintf("-p '%s'", password),
 		}
 	}
 

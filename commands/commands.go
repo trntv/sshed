@@ -156,6 +156,15 @@ func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *opt
 	args = append(args, cmds.bin)
 	args = append(args, fmt.Sprintf("-F %s", ssh.Config.Path))
 
+	if len(srv.Options) > 0 {
+		for k, v := range srv.Options {
+			if options.verbose == true {
+				fmt.Printf("%s: %s\r\n", ansi.Color(k, "green"), v)
+			}
+			args = append(args, fmt.Sprintf("-o %s=%s", k, v))
+		}
+	}
+
 	if pk := srv.PrivateKey(); pk != "" {
 		tf, err := ioutil.TempFile("", "")
 		defer os.Remove(tf.Name())
@@ -191,6 +200,7 @@ func (cmds *Commands) createCommand(c *cli.Context, srv *host.Host, options *opt
 	if srv.IdentityFile != "" {
 		args = append(args, fmt.Sprintf("-i %s", srv.IdentityFile))
 	}
+
 
 	if options.verbose == true {
 		args = append(args, "-v")

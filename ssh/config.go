@@ -32,7 +32,7 @@ type sshConfig struct {
 	cfg  *ssh_config.Config
 }
 
-func Parse(path string) (conf *sshConfig, err error) {
+func Parse(path string, nonStrict bool) (conf *sshConfig, err error) {
 	conf = &sshConfig{Path: path}
 
 	if _, err := os.Stat(conf.Path); os.IsNotExist(err) == false {
@@ -48,32 +48,34 @@ func Parse(path string) (conf *sshConfig, err error) {
 	}
 
 	for _, h := range conf.cfg.Hosts {
-		for _, pattern := range h.Patterns {
-			if maskPatternRegexp.MatchString(pattern.String()) == false {
-				conf.Hosts = append(conf.Hosts, pattern.String())
+		if h.EOLComment == " -- added by sshed" || nonStrict == true {
+			for _, pattern := range h.Patterns {
+				if maskPatternRegexp.MatchString(pattern.String()) == false {
+					conf.Hosts = append(conf.Hosts, pattern.String())
+				}
 			}
-		}
 
-		for _, node := range h.Nodes {
-			switch node.(type) {
-			case *ssh_config.KV:
-				key := node.(*ssh_config.KV).Key
-				if key != "IdentityFile" {
-					continue
-				}
-
-				path = node.(*ssh_config.KV).Value
-				exists := false
-				for _, v := range conf.Keys {
-					v = convertTilde(v)
-					path = convertTilde(path)
-					if v == path {
-						exists = true
-						break
+			for _, node := range h.Nodes {
+				switch node.(type) {
+				case *ssh_config.KV:
+					key := node.(*ssh_config.KV).Key
+					if key != "IdentityFile" {
+						continue
 					}
-				}
-				if exists == false {
-					conf.Keys = append(conf.Keys, path)
+
+					path = node.(*ssh_config.KV).Value
+					exists := false
+					for _, v := range conf.Keys {
+						v = convertTilde(v)
+						path = convertTilde(path)
+						if v == path {
+							exists = true
+							break
+						}
+					}
+					if exists == false {
+						conf.Keys = append(conf.Keys, path)
+					}
 				}
 			}
 		}

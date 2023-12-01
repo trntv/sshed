@@ -32,6 +32,11 @@ func main() {
 
 	app.HelpName = "help"
 	app.Flags = []cli.Flag{
+		cli.BoolTFlag{
+			Name:   "non-strict",
+			EnvVar: "SSHED_NON_STRICT",
+			Usage:  "disable strict mode, does not check the commented hosts only",
+		},
 		cli.StringFlag{
 			Name:   "keychain",
 			EnvVar: "SSHED_KEYCHAIN",
@@ -60,7 +65,7 @@ func main() {
 		}
 
 		var err error
-		ssh.Config, err = ssh.Parse(context.String("config"))
+		ssh.Config, err = ssh.Parse(context.String("config"), context.IsSet("non-strict") && context.Bool("non-strict") == true))
 		if err != nil {
 			return err
 		}
